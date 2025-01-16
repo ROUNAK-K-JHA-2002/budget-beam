@@ -1,6 +1,8 @@
 import 'package:budgetbeam/components/backup.dart';
 import 'package:budgetbeam/components/data_and_privacy.dart';
 import 'package:budgetbeam/components/developer.dart';
+import 'package:budgetbeam/components/feature_request.dart';
+import 'package:budgetbeam/components/feedback_bug.dart';
 import 'package:budgetbeam/components/invite.dart';
 import 'package:budgetbeam/components/settings.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
@@ -139,6 +141,24 @@ class ProfileScreen extends ConsumerWidget {
                             context: context,
                             builder: (context) => const Developer());
                         break;
+                      case "Feedback / Bug Report":
+                        showBottomSheet(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            showDragHandle: false,
+                            context: context,
+                            builder: (context) => const FeedbackBug());
+                        break;
+                      case "Feature Request":
+                        showBottomSheet(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            showDragHandle: false,
+                            context: context,
+                            builder: (context) => const FeatureRequest());
+                        break;
                       case "Logout":
                         showDialog(
                           context: context,
@@ -170,6 +190,7 @@ class ProfileScreen extends ConsumerWidget {
                   child: Container(
                     margin:
                         EdgeInsets.symmetric(vertical: 1.3.h, horizontal: 5.w),
+                    width: 90.w,
                     child: Row(
                       children: [
                         Icon(
