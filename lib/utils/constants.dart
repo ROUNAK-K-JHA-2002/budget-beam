@@ -1,0 +1,78 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+List<Map<String, dynamic>> profileItems = [
+  {
+    "icon": Icons.settings,
+    "title": "Settings",
+    "route": "/settings",
+  },
+  {
+    "icon": Icons.share,
+    "title": "Invite Friends",
+    "route": "/invite",
+  },
+  {
+    "icon": Icons.admin_panel_settings,
+    "title": "Data and Privacy",
+    "route": "/data",
+  },
+  {
+    "icon": Icons.backup,
+    "title": "Backup and Restore",
+    "route": "/backup",
+  },
+  {
+    "icon": Icons.code,
+    "title": "Developer Contact",
+    "route": "/developer",
+  },
+  {
+    "icon": Icons.logout,
+    "title": "Logout",
+    "route": "/logout",
+  },
+];
+
+List<String> tags = ['food', 'travel', 'entertainment', 'other'];
+List<String> types = ['spend', 'income'];
+
+Map<String, dynamic> generateColorAndAbbreviation(String inputString, int id) {
+  // Define a list of colors
+  List<Color> colors = [
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.yellow,
+    Colors.orange,
+    Colors.purple,
+    Colors.pink,
+    Colors.cyan,
+  ];
+
+  // Select a random color from the list
+  Color randomColor = colors[id % colors.length];
+
+  // Generate the abbreviated string
+  List<String> words = inputString.split(' ');
+  String abbreviatedString = words.map((word) => word[0].toUpperCase()).join();
+
+  return {
+    'color': randomColor,
+    'abbreviation': abbreviatedString,
+  };
+}
+
+String formatDate(DateTime date) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final yesterday = today.subtract(Duration(days: 1));
+
+  if (date.isAfter(today)) {
+    return 'Today';
+  } else if (date.isAfter(yesterday)) {
+    return 'Yesterday';
+  } else {
+    return DateFormat('MMM d, yyyy').format(date);
+  }
+}
