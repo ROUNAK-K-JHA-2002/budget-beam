@@ -1,4 +1,5 @@
 import 'package:budgetbeam/screens/finance_screen.dart';
+import 'package:budgetbeam/screens/group_screen.dart';
 import 'package:budgetbeam/screens/home_screen.dart';
 import 'package:budgetbeam/screens/profile_screen.dart';
 import 'package:budgetbeam/screens/view_screen.dart';
@@ -63,9 +64,15 @@ class _AppTemplateState extends State<AppTemplate> {
               activeColor: kPrimaryColor,
               inactiveColor: Colors.black,
             ),
+            // BarItem(
+            //   icon: Icons.insert_chart,
+            //   title: 'View',
+            //   activeColor: kPrimaryColor,
+            //   inactiveColor: Colors.black,
+            // ),
             BarItem(
-              icon: Icons.insert_chart,
-              title: 'View',
+              icon: Icons.group,
+              title: 'Groups',
               activeColor: kPrimaryColor,
               inactiveColor: Colors.black,
             ),
@@ -83,6 +90,7 @@ class _AppTemplateState extends State<AppTemplate> {
 List<Widget> _listOfWidget = [
   HomeScreen(),
   const FinanceScreen(),
-  const ViewScreen(),
+  const GroupScreen(),
+  // const ViewScreen(),
   const ProfileScreen(),
 ];
