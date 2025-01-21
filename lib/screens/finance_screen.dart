@@ -1,5 +1,4 @@
 import 'package:budgetbeam/provider/expense_provider.dart';
-import 'package:budgetbeam/provider/net_balance_provider.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +11,7 @@ class FinanceScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncExpenses = ref.watch(expenseProvider);
-    late ValueNotifier<String> selectedFilter = ValueNotifier("All");
+    // late ValueNotifier<String> selectedFilter = ValueNotifier("All");
     late ValueNotifier<String> selectedType = ValueNotifier("All Transactions");
     return Scaffold(
       body: SizedBox(

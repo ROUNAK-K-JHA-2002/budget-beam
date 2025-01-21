@@ -3,37 +3,30 @@ import 'package:budgetbeam/provider/expense_provider.dart';
 import 'package:budgetbeam/provider/net_balance_provider.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/services/object_box.dart';
+import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends ConsumerWidget {
   HomeScreen({super.key});
-  final _auth = FirebaseAuth.instance;
-  late Stream<List<ExpenseEntity>> expenseStream;
   final double budget = 10000;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (_auth.currentUser != null) {
-      Future(
-        () {
-          ref.read(userNotifierProvider.notifier).setUser(UserState(
-              email: _auth.currentUser?.email,
-              name: _auth.currentUser?.displayName,
-              profilePhoto: _auth.currentUser?.photoURL,
-              isAnonymous: _auth.currentUser?.isAnonymous));
-        },
-      );
-    }
-
     final asyncExpenses = ref.watch(expenseProvider);
-    final user = ref.watch(userNotifierProvider);
     final netBalance = ref.watch(netBalanceProvider);
+    final user = ref.watch(userNotifierProvider);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (user == null) {
+        getUser(FirebaseAuth.instance.currentUser?.uid ?? '', context, ref);
+      }
+    });
 
     String getGreeting() {
       DateTime now = DateTime.now();
@@ -48,6 +41,7 @@ class HomeScreen extends ConsumerWidget {
     }
 
     return Scaffold(
+        // backgroundColor: Colors.black,
         floatingActionButton: FloatingActionButton(
             backgroundColor: kSecondaryColor,
             onPressed: () {
@@ -57,14 +51,27 @@ class HomeScreen extends ConsumerWidget {
               Icons.add,
               color: Colors.white,
             )),
-        body: SizedBox(
+        body: Container(
           width: 100.w,
           height: 100.h,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/Images/bg.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
           child: Stack(
             children: [
-              SvgPicture.asset(
-                "assets/Images/homeBg.svg",
+              Container(
                 width: 100.w,
+                height: 30.h,
+                decoration: const BoxDecoration(
+                  // color: kPrimaryColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                ),
               ),
               Positioned(
                   top: 10,
@@ -83,16 +90,16 @@ class HomeScreen extends ConsumerWidget {
                             Text(
                               getGreeting(),
                               style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                              ),
                             ),
                             Text(
                               user?.name ?? "Ayoumouns User",
                               style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ],
                         ),
@@ -117,16 +124,23 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ))),
               Positioned(
-                  top: 20.h,
-                  left: 5.w,
+                  top: 18.h,
+                  left: 2.5.w,
                   child: Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                    width: 90.w,
+                    width: 95.w,
                     height: 22.h,
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(27, 92, 88, 1),
+                      color: kPrimaryColor,
                       borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 5,
+                          spreadRadius: 2,
+                        )
+                      ],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -258,10 +272,23 @@ class HomeScreen extends ConsumerWidget {
                                         b.dateCreated.compareTo(a.dateCreated));
                                     final entity = entities[index];
                                     final result = generateColorAndAbbreviation(
-                                        entity.name, entity.id);
-                                    return Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 2.h),
+                                        entity.name, index);
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.05),
+                                            blurRadius: 5,
+                                            spreadRadius: 2,
+                                          )
+                                        ],
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      margin: EdgeInsets.only(bottom: 2.h),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 1.5.h, horizontal: 3.w),
                                       child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,

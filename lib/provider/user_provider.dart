@@ -1,22 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:budgetbeam/models/user_model.dart'; // Import UserModel
 
-class UserState {
-  final String? email;
-  final String? name;
-  final String? profilePhoto;
-  final bool? isAnonymous;
-
-  UserState(
-      {required this.email,
-      required this.name,
-      this.profilePhoto,
-      this.isAnonymous = false});
-}
-
-class UserNotifier extends StateNotifier<UserState?> {
+class UserNotifier extends StateNotifier<UserModel?> {
   UserNotifier() : super(null);
 
-  void setUser(UserState user) {
+  void setUser(UserModel user) {
     state = user;
   }
 
@@ -27,4 +15,4 @@ class UserNotifier extends StateNotifier<UserState?> {
 
 // Provider for UserNotifier
 final userNotifierProvider =
-    StateNotifierProvider<UserNotifier, UserState?>((ref) => UserNotifier());
+    StateNotifierProvider<UserNotifier, UserModel?>((ref) => UserNotifier());

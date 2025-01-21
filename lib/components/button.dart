@@ -4,47 +4,67 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
+  final Widget icon;
   final VoidCallback onPressed;
-  final Color color;
   final Color textColor;
+  final bool isOutlined;
+  final bool isLoading;
 
   const CustomButton({
     super.key,
     required this.text,
+    required this.icon,
     required this.onPressed,
-    this.color = kPrimaryColor,
     this.textColor = Colors.white,
+    this.isOutlined = false,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
-      borderRadius: BorderRadius.circular(40),
+      borderRadius: BorderRadius.circular(18),
       child: Container(
-        width: 80.w,
-        height: 7.h,
+        width: 70.w,
+        height: 6.h,
         decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [kSecondaryColor, kPrimaryColor],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-            borderRadius: BorderRadius.circular(40),
-            boxShadow: [
-              BoxShadow(
-                color: kPrimaryColor.withOpacity(0.4),
-                offset: const Offset(0, 5),
-                blurRadius: 10,
-                spreadRadius: 5,
-              )
-            ]),
-        child: Column(
+          // gradient: LinearGradient(
+          //   colors: isOutlined
+          //       ? [Colors.white, Colors.white]
+          //       : [kSecondaryColor, kPrimaryColor],
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomCenter,
+          // ),
+          color: !isOutlined ? kPrimaryColor : Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 5,
+              spreadRadius: 2,
+              offset: const Offset(1, 5),
+            )
+          ],
+        ),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (isLoading)
+              const CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2,
+              )
+            else
+              icon,
+            SizedBox(width: 2.w),
             Text(
               text,
-              style: TextStyle(color: textColor, fontSize: 19.sp),
+              style: TextStyle(
+                color: isOutlined ? kPrimaryDark : textColor,
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),

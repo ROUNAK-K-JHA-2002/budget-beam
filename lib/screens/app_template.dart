@@ -2,7 +2,6 @@ import 'package:budgetbeam/screens/finance_screen.dart';
 import 'package:budgetbeam/screens/group_screen.dart';
 import 'package:budgetbeam/screens/home_screen.dart';
 import 'package:budgetbeam/screens/profile_screen.dart';
-import 'package:budgetbeam/screens/view_screen.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
@@ -34,6 +33,7 @@ class _AppTemplateState extends State<AppTemplate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: kPrimaryDark,
         body: Column(
           children: <Widget>[
             Expanded(
@@ -46,7 +46,7 @@ class _AppTemplateState extends State<AppTemplate> {
           ],
         ),
         bottomNavigationBar: SlidingClippedNavBar.colorful(
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           onButtonPressed: onButtonPressed,
           iconSize: 30,
           // activeColor: const Color(0xFF01579B),

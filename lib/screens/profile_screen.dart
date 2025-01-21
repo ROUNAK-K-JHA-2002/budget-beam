@@ -189,19 +189,19 @@ class ProfileScreen extends ConsumerWidget {
                   },
                   child: Container(
                     margin:
-                        EdgeInsets.symmetric(vertical: 1.3.h, horizontal: 5.w),
+                        EdgeInsets.symmetric(vertical: 1.h, horizontal: 5.w),
                     width: 90.w,
                     child: Row(
                       children: [
                         Icon(
                           profileItems[index]['icon'],
-                          size: 30,
+                          size: 25,
                         ),
                         SizedBox(width: 5.w),
                         Text(
                           profileItems[index]['title'],
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

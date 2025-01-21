@@ -1,13 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/components/button.dart';
+import 'package:budgetbeam/models/user_model.dart';
 import 'package:budgetbeam/services/sign_in.dart';
+import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,17 +19,31 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  ValueNotifier<bool> isLoading = ValueNotifier(false);
+
   Future<void> handleSignInProcess(String type, WidgetRef ref) async {
+    isLoading.value = true;
     if (type == 'google') {
-      User? user = await signInWithGoogle();
+      await signInWithGoogle();
+      User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        UserState userState = UserState(
-          email: user.email ?? '',
-          name: user.displayName ?? '',
-          profilePhoto: user.photoURL ?? '',
-          isAnonymous: user.isAnonymous,
-        );
-        ref.read(userNotifierProvider.notifier).setUser(userState);
+        UserModel? firebaseUser = await getUser(user.uid, context, ref);
+        if (firebaseUser == null) {
+          createUser(
+              UserModel(
+                  createdAt: DateTime.now(),
+                  userId: user.uid,
+                  email: user.email ?? '',
+                  groupId: '',
+                  groupName: '',
+                  hasAllowedGroupFeature: false,
+                  hasOnboarded: true,
+                  isConsentUsingApp: true,
+                  name: user.displayName ?? '',
+                  plan: 'Free Plan',
+                  profilePhoto: user.photoURL ?? ''),
+              context);
+        }
         Navigator.popAndPushNamed(context, '/');
       }
     } else if (type == 'anonymous') {
@@ -37,92 +52,153 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.popAndPushNamed(context, '/');
       }
     }
+    isLoading.value = false;
   }
+
+  final Shader linearGradient = const LinearGradient(
+    colors: <Color>[
+      Color.fromARGB(255, 235, 0, 243),
+      Color.fromARGB(255, 1, 78, 165)
+    ],
+  ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   @override
   Widget build(
     BuildContext context,
   ) {
     return Scaffold(
-      body: SafeArea(
-        child: Consumer(builder: (context, ref, child) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 5.h),
-            height: 100.h,
-            width: 100.w,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/Images/LoginBG.png'),
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.topCenter,
-              ),
+      // backgroundColor: Colors.black,
+      body: Consumer(builder: (context, ref, child) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+          height: 100.h,
+          width: 100.w,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/Images/login.png'),
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Image.asset('assets/Images/Coint.png'),
-                    Image.asset(
-                      'assets/Images/Man.png',
-                      height: 40.h,
-                    ),
-                    // Image.asset('assets/Images/Donut.png'),
-                  ],
-                ),
-                Text(
-                  'Spend Smarter \n Save More',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25.sp,
-                    fontWeight: FontWeight.bold,
-                    color: kPrimaryColor,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/Images/logo.png',
+                    width: 12.w,
+                    height: 12.w,
                   ),
-                ),
-                Column(
-                  children: [
-                    SignInButtonBuilder(
-                      fontSize: 15.sp,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      text: 'Continue with Google',
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
-                      image: SvgPicture.asset(
-                        'assets/Images/google.svg',
-                        height: 2.7.h,
-                      ),
-                      backgroundColor: Colors.white,
-                      textColor: kPrimaryColor,
-                      onPressed: () {
-                        handleSignInProcess('google', ref);
-                      },
+                  SizedBox(width: 2.w),
+                  Text(
+                    'Budget Beam',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w400,
+                      // color: Colors.white,
                     ),
-                    SizedBox(height: 2.h),
-                    SignInButtonBuilder(
-                      fontSize: 15.sp,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      text: 'Continue Anonymously',
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
-                      icon: Icons.person,
-                      backgroundColor: kPrimaryColor,
-                      onPressed: () {
-                        handleSignInProcess('anonymous', ref);
-                      },
+                  ),
+                ],
+              ),
+              SizedBox(height: 15.h),
+              Text(
+                'Spend Smarter \nSave More',
+                // textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 25.sp,
+                    fontWeight: FontWeight.w500,
+                    foreground: Paint()..shader = linearGradient),
+              ),
+              // Text(
+              //   'Your Privacy is Protected',
+              //   textAlign: TextAlign.left,
+              //   style: TextStyle(
+              //     fontSize: 15.sp,
+              //     fontWeight: FontWeight.w300,
+              //     color: Colors.white,
+              //   ),
+              // ),
+              SizedBox(height: 5.h),
+              Column(
+                children: [
+                  CustomButton(
+                    text: 'Continue with Google',
+                    icon: SvgPicture.asset(
+                      'assets/Images/google.svg',
+                      width: 7.w,
+                      height: 7.w,
                     ),
-                  ],
-                )
-              ],
-            ),
-          );
-        }),
-      ),
+                    onPressed: () {
+                      handleSignInProcess('google', ref);
+                    },
+                  ),
+                  SizedBox(height: 2.h),
+                  ValueListenableBuilder(
+                    valueListenable: isLoading,
+                    builder: (context, value, child) {
+                      return CustomButton(
+                        isLoading: isLoading.value,
+                        text: 'Continue Anonymously',
+                        isOutlined: true,
+                        icon: const Icon(
+                          Icons.person,
+                        ),
+                        onPressed: () {
+                          handleSignInProcess('anonymous', ref);
+                        },
+                      );
+                    },
+                  ),
+                  SizedBox(height: 2.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'By continuing, you agree to our',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(width: 1.w),
+                      Text(
+                        'Terms of Service ',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w800,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      SizedBox(width: 1.w),
+                      Text(
+                        'and',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(width: 1.w),
+                      Text(
+                        'Privacy Policy.',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w800,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )
+            ],
+          ),
+        );
+      }),
     );
   }
 }

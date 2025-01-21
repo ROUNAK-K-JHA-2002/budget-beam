@@ -8,6 +8,7 @@ class UserModel {
   final bool hasOnboarded;
   final bool isConsentUsingApp;
   final String name;
+  final String profilePhoto;
   final String plan;
 
   UserModel({
@@ -21,6 +22,7 @@ class UserModel {
     required this.isConsentUsingApp,
     required this.name,
     required this.plan,
+    required this.profilePhoto,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class UserModel {
       isConsentUsingApp: json['is_consent_using_app'],
       name: json['name'],
       plan: json['plan'],
+      profilePhoto: json['profile_photo'],
     );
   }
 
@@ -50,6 +53,7 @@ class UserModel {
       'is_consent_using_app': isConsentUsingApp,
       'name': name,
       'plan': plan,
+      'profile_photo': profilePhoto,
     };
   }
 }

@@ -30,7 +30,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         return Theme(
           data: ThemeData.light().copyWith(
             primaryColor: kPrimaryColor,
-            colorScheme: const ColorScheme.light(primary: kPrimaryColor),
+            colorScheme: ColorScheme.light(primary: kPrimaryColor),
             buttonTheme:
                 const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),

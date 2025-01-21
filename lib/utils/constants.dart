@@ -8,6 +8,11 @@ List<Map<String, dynamic>> profileItems = [
     "route": "/settings",
   },
   {
+    "icon": Icons.diamond,
+    "title": "Upgrade to Premium",
+    "route": "/upgrade",
+  },
+  {
     "icon": Icons.share,
     "title": "Invite Friends",
     "route": "/invite",
@@ -47,7 +52,7 @@ List<Map<String, dynamic>> profileItems = [
 List<String> tags = ['food', 'travel', 'entertainment', 'other'];
 List<String> types = ['spend', 'income'];
 
-Map<String, dynamic> generateColorAndAbbreviation(String inputString, int id) {
+Map<String, dynamic> generateColorAndAbbreviation(String inputString, int? id) {
   // Define a list of colors
   List<Color> colors = [
     Colors.red,
@@ -61,7 +66,7 @@ Map<String, dynamic> generateColorAndAbbreviation(String inputString, int id) {
   ];
 
   // Select a random color from the list
-  Color randomColor = colors[id % colors.length];
+  Color randomColor = colors[13 % colors.length];
 
   // Generate the abbreviated string
   List<String> words = inputString.split(' ');

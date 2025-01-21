@@ -1,8 +1,10 @@
 import 'package:budgetbeam/routes/router.dart';
 import 'package:budgetbeam/services/object_box.dart';
+import 'package:budgetbeam/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -41,8 +43,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
+          fontFamily: 'OpenSans',
         ),
-        initialRoute: auth.currentUser == null ? '/login' : '/',
+        initialRoute: auth.currentUser == null ? '/onboarding' : '/',
         routes: appRoutes,
       );
     });
