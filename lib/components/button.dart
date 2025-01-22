@@ -40,7 +40,8 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color:
+                  !isOutlined ? kPrimaryColor.withOpacity(0.3) : Colors.black12,
               blurRadius: 5,
               spreadRadius: 2,
               offset: const Offset(1, 5),

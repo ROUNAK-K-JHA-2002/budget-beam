@@ -217,6 +217,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.7"
   fake_async:
     dependency: transitive
     description:
@@ -297,6 +305,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      sha256: "5276944c6ffc975ae796569a826c38a62d2abcf264e26b88fa6f482e107f4237"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.70.2"
   flat_buffers:
     dependency: transitive
     description:
@@ -480,14 +496,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
-  glossy:
-    dependency: "direct main"
-    description:
-      name: glossy
-      sha256: "70c7626430a23b903755766d161f024d93334f2b06d7b96f6b6c7204aa0b8941"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.5"
   google_identity_services_web:
     dependency: transitive
     description:

@@ -1,4 +1,6 @@
+import 'package:budgetbeam/components/LineChartGraph.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
+import 'package:budgetbeam/services/chart_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ class FinanceScreen extends ConsumerWidget {
         TabController(length: 2, vsync: Scaffold.of(context));
     // late ValueNotifier<String> selectedFilter = ValueNotifier("All");
     late ValueNotifier<String> selectedType = ValueNotifier("All Transactions");
+
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -204,8 +207,11 @@ class FinanceScreen extends ConsumerWidget {
                                 itemCount:
                                     entities.length > 4 ? 4 : entities.length,
                                 itemBuilder: (context, index) {
-                                  entities.sort((a, b) =>
-                                      b.dateCreated.compareTo(a.dateCreated));
+                                  if (selectedType.value ==
+                                      "All Transactions") {
+                                    entities.sort((a, b) =>
+                                        b.dateCreated.compareTo(a.dateCreated));
+                                  }
                                   final entity = entities[index];
                                   // final result = generateColorAndAbbreviation(
                                   //     entity.name, entity.id);
@@ -290,6 +296,7 @@ class FinanceScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
+                // ,
                 Container(
                   width: 100.w,
                   height: 50.h,

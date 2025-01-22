@@ -5,6 +5,7 @@ import 'package:budgetbeam/components/feature_request.dart';
 import 'package:budgetbeam/components/feedback_bug.dart';
 import 'package:budgetbeam/components/invite.dart';
 import 'package:budgetbeam/components/settings.dart';
+import 'package:budgetbeam/components/upgrade.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
@@ -110,6 +111,15 @@ class ProfileScreen extends ConsumerWidget {
                               showDragHandle: false,
                               context: context,
                               builder: (context) => const DataAndPrivacy());
+                          break;
+                        case "Upgrade to Premium":
+                          showBottomSheet(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              showDragHandle: false,
+                              context: context,
+                              builder: (context) => const Upgrade());
                           break;
                         case "Backup and Restore":
                           showBottomSheet(

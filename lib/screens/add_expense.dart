@@ -22,7 +22,7 @@ class _AddExpenseState extends State<AddExpense> {
   final TextEditingController _amountController = TextEditingController();
   String _type = 'spend';
   DateTime _date = DateTime.now();
-  String _tag = 'food';
+  String _categories = 'food';
 
   late ObjectBoxStore _objectBoxStore;
 
@@ -183,7 +183,7 @@ class _AddExpenseState extends State<AddExpense> {
                           ),
                           SizedBox(height: 2.h),
                           Text(
-                            "Tag",
+                            "Categories",
                             style: TextStyle(
                               fontSize: 16.sp,
                               color: Colors.grey.shade700,
@@ -193,7 +193,7 @@ class _AddExpenseState extends State<AddExpense> {
                           CustomDropdown(
                               options: tags,
                               onChanged: (value) =>
-                                  setState(() => _tag = value)),
+                                  setState(() => _categories = value)),
                           SizedBox(height: 2.h),
                           Text(
                             "Date",
@@ -260,7 +260,7 @@ class _AddExpenseState extends State<AddExpense> {
   void _submitForm(BuildContext context) {
     try {
       _objectBoxStore.saveExpenseToDB(_nameController.text,
-          int.parse(_amountController.text), _date, _tag, _type);
+          int.parse(_amountController.text), _date, _categories, _type);
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Expense added successfully!')));
       Navigator.pop(context);
