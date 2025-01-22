@@ -95,22 +95,54 @@ class HomeScreen extends ConsumerWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // Navigator.pop(context);
+                          // Handle tap action, such as clearing ObjectBox data
                           ObjectBoxStore.instance.store
                               .box<ExpenseEntity>()
                               .removeAll();
                         },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: Image.network(
-                            user?.profilePhoto ??
-                                "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
-                            height: 5.h,
-                            width: 5.h,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return const CircularProgressIndicator();
-                            },
+                        child: Container(
+                          decoration: user?.hasOnboarded == true
+                              ? BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Colors.red,
+                                      Colors.orange,
+                                      Colors.yellow,
+                                      Colors.green,
+                                      Colors.blue,
+                                      Colors.indigo,
+                                      Colors.purple,
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
+                                    )
+                                  ],
+                                )
+                              : null, // No border for non-premium users
+                          padding: user?.hasOnboarded == true
+                              ? EdgeInsets.all(4.0)
+                              : EdgeInsets.zero, // Border thickness
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.network(
+                              user?.profilePhoto ??
+                                  "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+                              height: 5.h,
+                              width: 5.h,
+                              fit: BoxFit.cover,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return const CircularProgressIndicator();
+                              },
+                            ),
                           ),
                         ),
                       )
