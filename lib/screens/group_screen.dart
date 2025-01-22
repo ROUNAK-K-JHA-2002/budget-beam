@@ -83,17 +83,16 @@ class GroupScreen extends ConsumerWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 10,
-        shadowColor: Colors.black,
-        backgroundColor: kPrimaryColor,
-        centerTitle: true,
-        title: const Text(
-          'Groups',
-          style: TextStyle(color: Colors.white),
+        body: SafeArea(
+      child: Container(
+        width: 100.w,
+        height: 100.h,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/Images/bg.png"),
+            fit: BoxFit.cover,
+          ),
         ),
-      ),
-      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -185,6 +184,6 @@ class GroupScreen extends ConsumerWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

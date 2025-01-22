@@ -1,4 +1,5 @@
 import 'package:budgetbeam/provider/expense_provider.dart';
+import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,41 +12,68 @@ class FinanceScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncExpenses = ref.watch(expenseProvider);
+    final TabController tabController =
+        TabController(length: 2, vsync: Scaffold.of(context));
     // late ValueNotifier<String> selectedFilter = ValueNotifier("All");
     late ValueNotifier<String> selectedType = ValueNotifier("All Transactions");
     return Scaffold(
-      body: SizedBox(
-          width: 100.w,
-          height: 100.h,
-          child: Stack(
-            children: [
-              SvgPicture.asset(
-                "assets/Images/homeBg.svg",
-                width: 100.w,
-              ),
-              Positioned(
-                  top: 10.h,
+      body: SafeArea(
+          child: Container(
+        width: 100.w,
+        height: 100.h,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/Images/bg.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          children: [
+            // Container(
+            //   width: 100.w,
+            //   height: 10.h,
+            //   alignment: Alignment.center,
+            //   decoration: const BoxDecoration(
+            //     color: kPrimaryColor,
+            //     borderRadius: BorderRadius.only(
+            //       bottomLeft: Radius.circular(20),
+            //       bottomRight: Radius.circular(20),
+            //     ),
+            //   ),
+            //   child: Text("Finance", style: TextStyle(fontSize: 20.sp)),
+            // ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+              child: TabBar(
+                  controller: tabController,
+                  indicator: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  labelColor: Colors.white,
+                  splashFactory: InkSplash.splashFactory,
+                  dividerColor: Colors.transparent,
+                  unselectedLabelColor: Colors.black,
+                  tabs: [
+                    Tab(
+                        child: Container(
+                            width: 50.w,
+                            alignment: Alignment.center,
+                            child: const Text("ListView"))),
+                    Tab(
+                        child: Container(
+                            width: 40.w,
+                            alignment: Alignment.center,
+                            child: const Text("Analyze"))),
+                  ]),
+            ),
+            Expanded(
+              child: TabBarView(controller: tabController, children: [
+                Container(
                   width: 100.w,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Transactions",
-                        style: TextStyle(
-                            fontSize: 20.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  )),
-              Positioned(
-                top: 20.h,
-                child: Container(
-                  width: 100.w,
-                  height: 80.h,
-                  padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.h),
+                  height: 50.h,
+                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                   decoration: BoxDecoration(
-                    color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Column(
@@ -163,6 +191,7 @@ class FinanceScreen extends ConsumerWidget {
                       ),
                       SizedBox(
                         height: 70.h,
+                        width: 100.w,
                         child: asyncExpenses.when(
                           data: (entities) {
                             if (entities.isEmpty) {
@@ -178,11 +207,23 @@ class FinanceScreen extends ConsumerWidget {
                                   entities.sort((a, b) =>
                                       b.dateCreated.compareTo(a.dateCreated));
                                   final entity = entities[index];
-                                  final result = generateColorAndAbbreviation(
-                                      entity.name, entity.id);
-                                  return Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 2.h),
+                                  // final result = generateColorAndAbbreviation(
+                                  //     entity.name, entity.id);
+                                  return Container(
+                                    margin: EdgeInsets.only(bottom: 2.h),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 1.5.h, horizontal: 3.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.05),
+                                          blurRadius: 5,
+                                          spreadRadius: 2,
+                                        )
+                                      ],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                     child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -196,12 +237,11 @@ class FinanceScreen extends ConsumerWidget {
                                                 height: 5.h,
                                                 width: 5.h,
                                                 decoration: BoxDecoration(
-                                                    color: result['color'],
+                                                    color: Colors.grey.shade200,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15)),
-                                                child: Text(
-                                                    result['abbreviation'],
+                                                child: Text(entity.name,
                                                     style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w600)),
@@ -250,9 +290,16 @@ class FinanceScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-              ),
-            ],
-          )),
+                Container(
+                  width: 100.w,
+                  height: 50.h,
+                  child: Text("Analyze"),
+                )
+              ]),
+            )
+          ],
+        ),
+      )),
     );
   }
 }

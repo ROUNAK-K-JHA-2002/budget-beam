@@ -21,6 +21,9 @@ Future<void> main() async {
   }
   _objectBoxStore = await ObjectBoxStore.create();
   await Firebase.initializeApp();
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: kPrimaryColor, // status bar color
+  ));
 
   runApp(const ProviderScope(child: MyApp()));
 }

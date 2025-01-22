@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 15.h),
+              SizedBox(height: 12.h),
               Text(
                 'Spend Smarter \nSave More',
                 // textAlign: TextAlign.center,
@@ -192,7 +192,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  SizedBox(height: 3.h),
                 ],
               )
             ],

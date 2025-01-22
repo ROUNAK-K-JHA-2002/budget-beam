@@ -50,7 +50,7 @@ List<Map<String, dynamic>> profileItems = [
 ];
 
 List<String> tags = ['food', 'travel', 'entertainment', 'other'];
-List<String> types = ['spend', 'income'];
+List<String> types = ['Spend', 'Income'];
 
 Map<String, dynamic> generateColorAndAbbreviation(String inputString, int? id) {
   // Define a list of colors
