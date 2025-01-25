@@ -7,6 +7,7 @@ import 'package:budgetbeam/entity/expense_entity.dart';
 import 'package:budgetbeam/services/object_box.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
+import 'package:budgetbeam/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -90,7 +91,16 @@ class _AddExpenseState extends State<AddExpense> {
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(width: 3.w)
+                        if (widget.expense != null)
+                          IconButton(
+                            onPressed: () {
+                              //  showDialog(context: context, builder: (conte;)
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -114,36 +124,45 @@ class _AddExpenseState extends State<AddExpense> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Name",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              // color: Colors.black,
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                "Title",
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  // color: Colors.black,
+                                ),
+                              ),
+                              const Text("*",
+                                  style: TextStyle(color: Colors.red)),
+                            ],
                           ),
                           SizedBox(height: 1.h),
                           CustomTextField(
-                            hintText: 'Enter Name',
-                            shadowColor: Colors.grey.shade300,
-                            fontSize: 16.0,
-                            textColor: Colors.black,
+                            hintText: 'Enter Title',
+                            // fontSize: 16.0,
                             controller: _nameController,
+                            prefixIcon: const Icon(Icons.note),
                           ),
                           SizedBox(height: 2.h),
-                          Text(
-                            "Amount",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              // color: Colors.black,
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                "Amount",
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  // color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(width: 1.w),
+                              const Text("*",
+                                  style: TextStyle(color: Colors.red)),
+                            ],
                           ),
                           SizedBox(height: 1.h),
                           CustomTextField(
                             hintText: 'Enter Amount',
-                            shadowColor: Colors.grey.shade300,
-                            textInputType: TextInputType.number,
-                            fontSize: 16.0,
-                            textColor: Colors.black,
+                            prefixIcon: const Icon(Icons.currency_rupee),
                             controller: _amountController,
                           ),
                           SizedBox(height: 2.h),
@@ -281,12 +300,10 @@ class _AddExpenseState extends State<AddExpense> {
           _category,
           types[selectedIndex.value].toLowerCase(),
           widget.expense != null ? true : false);
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Expense added successfully!')));
+      showSuccessSnackbar("Expense added successfully!");
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to add expense.')));
+      showErrorSnackbar("Failed to save expense.");
       debugPrint("Failed to save expense: $e");
     }
   }

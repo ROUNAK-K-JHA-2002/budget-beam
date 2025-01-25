@@ -2,6 +2,7 @@
 
 import 'package:budgetbeam/models/user_model.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/utils/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,13 +13,9 @@ void createUser(UserModel user, BuildContext context) async {
         .collection('users')
         .doc(user.userId)
         .set(user.toJson());
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('User created successfully')),
-    );
+    showSuccessSnackbar("User created successfully");
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to create user: $e')),
-    );
+    showErrorSnackbar("Failed to create user: $e");
   }
 }
 
@@ -29,13 +26,9 @@ void updateUser(
         .collection('users')
         .doc(userId)
         .update(userData);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('User updated successfully')),
-    );
+    showSuccessSnackbar("User updated successfully");
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to update user: $e')),
-    );
+    showErrorSnackbar("Failed to update user: $e");
   }
 }
 
@@ -49,15 +42,11 @@ Future<UserModel?> getUser(
       ref.read(userNotifierProvider.notifier).setUser(user);
       return user;
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User does not exist')),
-      );
+      showErrorSnackbar("Failed to retrieve user");
       return null;
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to retrieve user: $e')),
-    );
+    showErrorSnackbar("Failed to retrieve user: $e");
     return null;
   }
 }

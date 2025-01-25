@@ -8,6 +8,8 @@ import 'package:budgetbeam/services/object_box.dart';
 import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
+import 'package:budgetbeam/utils/helpers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -162,17 +164,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               : EdgeInsets.zero, // Border thickness
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
-                            child: Image.network(
-                              user?.profilePhoto ??
+                            child: CachedNetworkImage(
+                              imageUrl: user?.profilePhoto ??
                                   "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
                               height: 5.h,
                               width: 5.h,
                               fit: BoxFit.cover,
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return const CircularProgressIndicator();
-                              },
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
                           ),
                         ),

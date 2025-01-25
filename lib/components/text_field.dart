@@ -52,13 +52,13 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: fieldHeight,
+      height: maxLines == 1 ? fieldHeight : null,
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: Colors.black12.withOpacity(0.01),
             offset: offset,
             spreadRadius: spreadRadius,
             blurRadius: blurRadius,
@@ -77,7 +77,6 @@ class CustomTextField extends StatelessWidget {
             FilteringTextInputFormatter.allow(RegExp(r'.*')),
         ],
         maxLines: maxLines,
-        textAlign: textAlign,
         style: TextStyle(
           fontSize: fontSize,
           color: textColor,
@@ -87,14 +86,14 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
-          contentPadding: EdgeInsets.zero,
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide(color: Colors.black12),
+            borderSide: const BorderSide(color: Colors.black12),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide(color: Colors.black12),
+            borderSide: const BorderSide(color: Colors.black12),
           ),
           filled: true,
           hintText: hintText,

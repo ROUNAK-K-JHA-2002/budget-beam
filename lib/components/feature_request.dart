@@ -1,3 +1,5 @@
+import 'package:budgetbeam/components/dropdown.dart';
+import 'package:budgetbeam/components/text_field.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -53,6 +55,13 @@ class _FeatureRequestState extends State<FeatureRequest> {
               fontSize: 15.sp,
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [],
+            ),
+          )
         ],
       ),
     );

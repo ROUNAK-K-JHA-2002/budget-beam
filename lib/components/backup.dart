@@ -15,7 +15,7 @@ class _BackupState extends State<Backup> {
     return Container(
       height: 60.h,
       width: 100.w,
-      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 4.h),
       decoration: BoxDecoration(
         // color: Colors.red,
         borderRadius: BorderRadius.circular(20),
@@ -47,6 +47,7 @@ class _BackupState extends State<Backup> {
               )
             ],
           ),
+          SizedBox(height: 2.h),
           Text(
             "Backup your data and restore it later using Google Drive.",
             style: TextStyle(
@@ -54,6 +55,27 @@ class _BackupState extends State<Backup> {
             ),
           ),
           SizedBox(height: 2.h),
+          Container(
+            alignment: Alignment.center,
+            child: Image.asset(
+              'assets/Images/coming_soon.png',
+              // height: 20.h,
+              width: 60.w,
+            ),
+          ),
+          SizedBox(height: 2.h),
+          Container(
+            alignment: Alignment.center,
+            child: Text(
+              "Oops! This screen's still in the oven. Patience, chef!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w600,
+                color: kPrimaryColor,
+              ),
+            ),
+          )
         ],
       ),
     );

@@ -33,11 +33,6 @@ List<Map<String, dynamic>> profileItems = [
     "route": "/developer",
   },
   {
-    "icon": Icons.request_page,
-    "title": "Feature Request",
-    "route": "/developer",
-  },
-  {
     "icon": Icons.code,
     "title": "Developer Contact",
     "route": "/developer",

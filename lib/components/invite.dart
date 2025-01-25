@@ -1,6 +1,7 @@
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Invite extends StatefulWidget {
   const Invite({super.key});
@@ -73,7 +74,10 @@ class _InviteState extends State<Invite> {
               children: [
                 MaterialButton(
                   color: kPrimaryColor,
-                  onPressed: () {},
+                  onPressed: () async {
+                    await Share.share(
+                        'Check out BudgetBeam! Your very own secure personal finance app. https://appdistribution.firebase.dev/i/a46c6c875c18905c');
+                  },
                   child: const Text("Share the App",
                       style: TextStyle(color: Colors.white)),
                 )

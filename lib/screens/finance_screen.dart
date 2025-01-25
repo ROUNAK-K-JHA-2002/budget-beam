@@ -1,4 +1,5 @@
 import 'package:budgetbeam/components/line_graph.dart';
+import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
@@ -17,6 +18,7 @@ class FinanceScreen extends ConsumerStatefulWidget {
 class _FinanceScreenState extends ConsumerState<FinanceScreen> {
   InterstitialAd? _interstitialAd;
   int _numInterstitialLoadAttempts = 0;
+  ValueNotifier<String> chartViewFrequency = ValueNotifier("0");
 
   void createInterstitialAd() {
     InterstitialAd.load(
@@ -50,7 +52,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
     super.dispose();
   }
 
-  void _showInterstitialAd() {
+  void showInterstitialAd() {
     if (_interstitialAd == null) {
       return;
     }
@@ -67,6 +69,25 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
     );
     _interstitialAd!.show();
     _interstitialAd = null;
+  }
+
+  Future<void> loadChartViewCount() async {
+    String? count = await storage.read(key: "chartViewCount");
+    chartViewFrequency.value = count ?? "0";
+  }
+
+  Future<void> _incrementChartViewCount() async {
+    chartViewFrequency.value =
+        (int.parse(chartViewFrequency.value) + 1).toString();
+    if (chartViewFrequency.value == "0") {
+      showInterstitialAd();
+    }
+    if (int.parse(chartViewFrequency.value) >= 3) {
+      showInterstitialAd();
+      chartViewFrequency.value = "0";
+    }
+    await storage.write(
+        key: "chartViewCount", value: chartViewFrequency.toString());
   }
 
   @override
@@ -134,7 +155,8 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                       controller: tabController,
                       onTap: (index) {
                         if (index == 1) {
-                          // _showInterstitialAd();
+                          showInterstitialAd();
+                          // _incrementChartViewCount();
                         }
                       },
                       indicator: BoxDecoration(
