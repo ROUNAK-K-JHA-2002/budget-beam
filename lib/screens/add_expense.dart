@@ -35,19 +35,12 @@ class _AddExpenseState extends State<AddExpense> {
 
   @override
   Widget build(BuildContext context) {
-    int inputs = 2;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Container(
-            decoration: BoxDecoration(
-              image: const DecorationImage(
-                image: AssetImage("assets/Images/bg.png"),
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.circular(20),
-            ),
             width: 100.w,
+            color: kPrimaryColor,
             height: 100.h,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,42 +66,35 @@ class _AddExpenseState extends State<AddExpense> {
                             },
                             icon: const Icon(
                               Icons.arrow_back,
-                              // color: Colors.white,
+                              color: Colors.white,
                             )),
                         Text(
                           "Add Expense",
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
-                            // color: Colors.white,
+                            color: Colors.white,
                           ),
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.notifications,
-                              // color: Colors.white,
-                            )),
+                        SizedBox(width: 3.w)
                       ],
                     ),
                   ),
                   Container(
                     width: 100.w,
-                    height: 80.h,
+                    height: 85.h,
                     decoration: const BoxDecoration(
                       color: Colors.white,
+                      image: DecorationImage(
+                        image: AssetImage("assets/Images/bg.png"),
+                        fit: BoxFit.cover,
+                      ),
                       borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16.0),
-                          topRight: Radius.circular(16.0)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black38,
-                          blurRadius: 20,
-                          offset: Offset(2, 2),
-                        ),
-                      ],
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
                     ),
-                    padding: const EdgeInsets.all(16.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -162,7 +148,7 @@ class _AddExpenseState extends State<AddExpense> {
                               crossAxisAlignment: WrapCrossAlignment.center,
                               spacing: 5.w,
                               children: List<Widget>.generate(
-                                inputs,
+                                types.length,
                                 (int index) {
                                   return ValueListenableBuilder(
                                       valueListenable: selectedIndex,
@@ -215,7 +201,7 @@ class _AddExpenseState extends State<AddExpense> {
                           CustomDatePicker(onDateSelected: (selecteddate) {
                             setState(() => _date = selecteddate);
                           }),
-                          SizedBox(height: 2.h),
+                          SizedBox(height: 4.h),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -242,7 +228,7 @@ class _AddExpenseState extends State<AddExpense> {
                                         ),
                                         BoxShadow(
                                           color: Color.fromARGB(
-                                              255, 185, 187, 192),
+                                              255, 158, 134, 243),
                                           blurRadius: 20,
                                           offset: Offset(2, 2),
                                         ),
@@ -250,7 +236,7 @@ class _AddExpenseState extends State<AddExpense> {
                                     ),
                                     duration: const Duration(milliseconds: 50),
                                     child: Text(
-                                      "Submit",
+                                      "Save",
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 16.sp),
                                     ),

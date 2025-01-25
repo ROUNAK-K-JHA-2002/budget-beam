@@ -124,39 +124,57 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
             // ),
             // bannerAdWidget(),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-              child: TabBar(
-                  controller: tabController,
-                  indicator: BoxDecoration(
-                    color: kPrimaryColor,
+                width: 100.w,
+                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                child: Container(
+                  width: 80.w,
+                  padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 5,
+                        spreadRadius: 2,
+                      )
+                    ],
                   ),
-                  labelColor: Colors.white,
-                  splashFactory: InkSplash.splashFactory,
-                  dividerColor: Colors.transparent,
-                  unselectedLabelColor: Colors.black,
-                  tabs: [
-                    Tab(
-                        child: Container(
-                            width: 50.w,
-                            alignment: Alignment.center,
-                            child: const Text("List View"))),
-                    Tab(
-                        child: Container(
-                            width: 40.w,
-                            alignment: Alignment.center,
-                            child: const Text("Chart View"))),
-                  ]),
-            ),
+                  child: TabBar(
+                      controller: tabController,
+                      onTap: (index) {
+                        if (index == 1) {
+                          // _showInterstitialAd();
+                        }
+                      },
+                      indicator: BoxDecoration(
+                        color: kPrimaryColor.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      labelColor: kPrimaryColor,
+                      splashFactory: InkSplash.splashFactory,
+                      dividerColor: Colors.transparent,
+                      unselectedLabelColor: Colors.black,
+                      tabs: [
+                        Tab(
+                            child: Container(
+                                width: 50.w,
+                                alignment: Alignment.center,
+                                child: const Text("List View"))),
+                        Tab(
+                            child: Container(
+                                width: 40.w,
+                                alignment: Alignment.center,
+                                child: const Text("Chart View"))),
+                      ]),
+                )),
             Expanded(
               child: TabBarView(controller: tabController, children: [
                 Container(
                   width: 100.w,
                   height: 50.h,
                   padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                  decoration: BoxDecoration(),
                   child: Column(
                     children: [
                       Row(
