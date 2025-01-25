@@ -1,7 +1,9 @@
 import 'package:budgetbeam/entity/expense_entity.dart';
+import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
 import 'package:budgetbeam/provider/net_balance_provider.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/services/ads_service.dart';
 import 'package:budgetbeam/services/object_box.dart';
 import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
@@ -10,15 +12,47 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
-class HomeScreen extends ConsumerWidget {
+
+class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   final double budget = 10000;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    bannerAd.load();
+  }
+
+  @override
+  void dispose() {
+    bannerAd.dispose();
+    super.dispose();
+  }
+
+  Widget bannerAdWidget() {
+    return StatefulBuilder(
+      builder: (context, setState) => Container(
+        margin: EdgeInsets.symmetric(vertical: 0.5.h),
+        width: bannerAd.size.width.toDouble(),
+        height: 5.h,
+        alignment: Alignment.center,
+        child: AdWidget(ad: bannerAd..load()),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final asyncExpenses = ref.watch(expenseProvider);
     final netBalance = ref.watch(netBalanceProvider);
     final user = ref.watch(userNotifierProvider);
@@ -149,6 +183,10 @@ class HomeScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
+                // Container(
+                //   height: 5.h,
+                //   child: AdWidget(ad: bannerAd),
+                // ),
                 Stack(
                   children: [
                     Container(
@@ -249,7 +287,7 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 Container(
                   width: 100.w,
-                  height: 50.h,
+                  // height: 5.h,
                   padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
                   child: Column(
                     children: [
@@ -274,6 +312,8 @@ class HomeScreen extends ConsumerWidget {
                                   fontSize: 16, fontWeight: FontWeight.w400)),
                         ],
                       ),
+
+                      bannerAdWidget(),
                       SizedBox(
                         height: 40.h,
                         width: 90.w,

@@ -1,19 +1,86 @@
 import 'package:budgetbeam/components/line_graph.dart';
 import 'package:budgetbeam/components/pie_chart_graph.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
+import 'package:budgetbeam/services/ads_service.dart';
 import 'package:budgetbeam/services/chart_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class FinanceScreen extends ConsumerWidget {
+class FinanceScreen extends ConsumerStatefulWidget {
   const FinanceScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _FinanceScreenState createState() => _FinanceScreenState();
+}
+
+class _FinanceScreenState extends ConsumerState<FinanceScreen> {
+  InterstitialAd? _interstitialAd;
+  int _numInterstitialLoadAttempts = 0;
+
+  void createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: "ca-app-pub-3940256099942544/1033173712",
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            print('${ad.adUnitId} loaded');
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error.');
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < 3) {
+              createInterstitialAd();
+            }
+          },
+        ));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    createInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      print('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final asyncExpenses = ref.watch(expenseProvider);
     final TabController tabController =
         TabController(length: 2, vsync: Scaffold.of(context));
@@ -55,6 +122,7 @@ class FinanceScreen extends ConsumerWidget {
             //   ),
             //   child: Text("Finance", style: TextStyle(fontSize: 20.sp)),
             // ),
+            // bannerAdWidget(),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
               child: TabBar(
@@ -199,7 +267,12 @@ class FinanceScreen extends ConsumerWidget {
                                   const Icon(Icons.keyboard_arrow_down)
                                 ],
                               )),
-                          const Icon(Icons.filter_list),
+                          GestureDetector(
+                            onTap: () {
+                              _showInterstitialAd();
+                            },
+                            child: const Icon(Icons.filter_list),
+                          ),
                         ],
                       ),
                       SizedBox(

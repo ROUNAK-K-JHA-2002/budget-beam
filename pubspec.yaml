@@ -51,6 +51,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   cloud_firestore: ^4.17.5
   graphic: ^2.5.1
+  google_mobile_ads: ^5.2.0
 
 dev_dependencies:
   flutter_test:

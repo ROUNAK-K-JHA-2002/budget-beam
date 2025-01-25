@@ -92,5 +92,5 @@ List<Widget> _listOfWidget = [
   const FinanceScreen(),
   const GroupScreen(),
   // const ViewScreen(),
-  const ProfileScreen(),
+  ProfileScreen(),
 ];

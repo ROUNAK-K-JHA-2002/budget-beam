@@ -7,19 +7,28 @@ import 'package:budgetbeam/components/invite.dart';
 import 'package:budgetbeam/components/settings.dart';
 import 'package:budgetbeam/components/upgrade.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/services/ads_service.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     final user = ref.watch(userNotifierProvider);
     return Scaffold(
         body: SafeArea(

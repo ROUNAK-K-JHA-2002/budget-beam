@@ -14,7 +14,7 @@ Map<String, WidgetBuilder> appRoutes = {
   '/login': (context) => const LoginScreen(),
   '/view': (context) => const ViewScreen(),
   '/finance': (context) => const FinanceScreen(),
-  '/profile': (context) => const ProfileScreen(),
+  '/profile': (context) => ProfileScreen(),
   '/finance-details': (context) => const FinanceDetailsScreen(),
   '/add-expense': (context) => const AddExpense(),
 };

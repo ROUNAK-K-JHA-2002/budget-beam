@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -21,6 +22,7 @@ Future<void> main() async {
   }
   _objectBoxStore = await ObjectBoxStore.create();
   await Firebase.initializeApp();
+  MobileAds.instance.initialize();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: kPrimaryColor, // status bar color
   ));
@@ -32,6 +34,8 @@ AndroidOptions _getAndroidOptions() => const AndroidOptions(
       encryptedSharedPreferences: true,
     );
 final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+
+final String bannerAdsId = dotenv.env['BANNER_ADS_TEST_ID'] ?? '';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
