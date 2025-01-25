@@ -58,7 +58,7 @@ class CustomTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: shadowColor,
+            color: Colors.black12,
             offset: offset,
             spreadRadius: spreadRadius,
             blurRadius: blurRadius,
@@ -90,11 +90,11 @@ class CustomTextField extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide(color: borderColor),
+            borderSide: BorderSide(color: Colors.black12),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide(color: borderColor),
+            borderSide: BorderSide(color: Colors.black12),
           ),
           filled: true,
           hintText: hintText,

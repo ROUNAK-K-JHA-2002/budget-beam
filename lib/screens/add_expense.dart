@@ -20,9 +20,10 @@ class _AddExpenseState extends State<AddExpense> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
-  String _type = 'spend';
+  String _type = types[0];
   DateTime _date = DateTime.now();
-  String _categories = 'food';
+  String _category = categories[0]['text'];
+  ValueNotifier<int> selectedIndex = ValueNotifier(0);
 
   late ObjectBoxStore _objectBoxStore;
 
@@ -35,7 +36,6 @@ class _AddExpenseState extends State<AddExpense> {
   @override
   Widget build(BuildContext context) {
     int inputs = 2;
-    ValueNotifier<int> selectedIndex = ValueNotifier(0);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: SafeArea(
@@ -118,7 +118,7 @@ class _AddExpenseState extends State<AddExpense> {
                             "Name",
                             style: TextStyle(
                               fontSize: 16.sp,
-                              color: Colors.grey.shade700,
+                              // color: Colors.black,
                             ),
                           ),
                           SizedBox(height: 1.h),
@@ -134,7 +134,7 @@ class _AddExpenseState extends State<AddExpense> {
                             "Amount",
                             style: TextStyle(
                               fontSize: 16.sp,
-                              color: Colors.grey.shade700,
+                              // color: Colors.black,
                             ),
                           ),
                           SizedBox(height: 1.h),
@@ -151,55 +151,64 @@ class _AddExpenseState extends State<AddExpense> {
                             "Type ",
                             style: TextStyle(
                               fontSize: 16.sp,
-                              color: Colors.grey.shade700,
+                              // color: Colors.black,
                             ),
                           ),
                           SizedBox(height: 1.h),
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 5.0,
-                            children: List<Widget>.generate(
-                              inputs,
-                              (int index) {
-                                return ValueListenableBuilder(
-                                    valueListenable: selectedIndex,
-                                    builder: (context, value, child) {
-                                      return InputChip(
-                                        labelPadding: EdgeInsets.symmetric(
-                                            horizontal: 10.w, vertical: 0.2.h),
-                                        label: Text(types[index]),
-                                        selected: selectedIndex.value == index,
-                                        onSelected: (bool selected) {
-                                          selectedIndex.value = index;
-                                          _type = types[index];
-                                        },
+                          SizedBox(
+                            width: 100.w,
+                            child: Wrap(
+                              alignment: WrapAlignment.center,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 5.w,
+                              children: List<Widget>.generate(
+                                inputs,
+                                (int index) {
+                                  return ValueListenableBuilder(
+                                      valueListenable: selectedIndex,
+                                      builder: (context, value, child) {
+                                        return InputChip(
+                                          labelPadding: EdgeInsets.symmetric(
+                                              horizontal: 10.w,
+                                              vertical: 0.2.h),
+                                          label: Text(types[index]),
+                                          selected:
+                                              selectedIndex.value == index,
+                                          backgroundColor: Colors.white,
+                                          elevation: 2,
+                                          onSelected: (bool selected) {
+                                            selectedIndex.value = index;
+                                            _type = types[index];
+                                          },
 
-                                        // onDeleted: () {
-                                        //
-                                      );
-                                    });
-                              },
-                            ).toList(),
+                                          // onDeleted: () {
+                                          //
+                                        );
+                                      });
+                                },
+                              ).toList(),
+                            ),
                           ),
                           SizedBox(height: 2.h),
                           Text(
                             "Categories",
                             style: TextStyle(
                               fontSize: 16.sp,
-                              color: Colors.grey.shade700,
+                              // color: Colors.black,
                             ),
                           ),
                           SizedBox(height: 1.h),
                           CustomDropdown(
-                              options: tags,
-                              onChanged: (value) =>
-                                  setState(() => _categories = value)),
+                              options: categories,
+                              onChanged: (value) {
+                                setState(() => _category = value);
+                              }),
                           SizedBox(height: 2.h),
                           Text(
                             "Date",
                             style: TextStyle(
                               fontSize: 16.sp,
-                              color: Colors.grey.shade700,
+                              // color: Colors.black,
                             ),
                           ),
                           SizedBox(height: 1.h),
@@ -259,8 +268,12 @@ class _AddExpenseState extends State<AddExpense> {
 
   void _submitForm(BuildContext context) {
     try {
-      _objectBoxStore.saveExpenseToDB(_nameController.text,
-          int.parse(_amountController.text), _date, _categories, _type);
+      _objectBoxStore.saveExpenseToDB(
+          _nameController.text,
+          int.parse(_amountController.text),
+          _date,
+          _category,
+          types[selectedIndex.value].toLowerCase());
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Expense added successfully!')));
       Navigator.pop(context);

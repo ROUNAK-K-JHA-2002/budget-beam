@@ -49,10 +49,15 @@ class GroupScreen extends ConsumerWidget {
                       bottomRight: Radius.circular(16),
                     ),
                   ),
+                  child: Center(
+                    child: Text("Group",
+                        style: TextStyle(color: Colors.white, fontSize: 20.sp)),
+                  ),
                 ),
                 Expanded(
                   child: Container(
-                    color: Colors.red,
+                    // color: Colors.red,
+                    child: Text("Coming Soon"),
                   ),
                 )
               ],

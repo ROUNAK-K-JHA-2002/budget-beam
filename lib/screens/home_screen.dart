@@ -253,16 +253,16 @@ class HomeScreen extends ConsumerWidget {
                   padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
                   child: Column(
                     children: [
-                      netBalance.netSpend > budget
-                          ? Padding(
-                              padding: EdgeInsets.only(bottom: 2.h),
-                              child: Text(
-                                  "!! You have exceeded your daily budget by ₹ ${netBalance.netSpend - budget}",
-                                  style: TextStyle(
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.red)))
-                          : const SizedBox(),
+                      // netBalance.netSpend > budget
+                      //     ? Padding(
+                      //         padding: EdgeInsets.only(bottom: 2.h),
+                      //         child: Text(
+                      //             "!! You have exceeded your daily budget by ₹ ${netBalance.netSpend - budget}",
+                      //             style: TextStyle(
+                      //                 fontSize: 14.sp,
+                      //                 fontWeight: FontWeight.w600,
+                      //                 color: Colors.red)))
+                      //     : const SizedBox(),
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -329,14 +329,40 @@ class HomeScreen extends ConsumerWidget {
                                                 height: 5.h,
                                                 width: 5.h,
                                                 decoration: BoxDecoration(
-                                                    color: Colors.red,
+                                                    color:
+                                                        categories.firstWhere(
+                                                      (element) {
+                                                        return element[
+                                                                'text'] ==
+                                                            entity.category;
+                                                      },
+                                                      orElse: () => {
+                                                        'color': kPrimaryColor
+                                                      },
+                                                    )['color'][100],
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15)),
-                                                child: Text(entity.name,
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600)),
+                                                child: Icon(
+                                                  categories.firstWhere(
+                                                      (element) {
+                                                    return element['text'] ==
+                                                        entity.category;
+                                                  },
+                                                      orElse: () => {
+                                                            'color':
+                                                                kPrimaryColor
+                                                          })['icon'],
+                                                  color: categories.firstWhere(
+                                                    (element) {
+                                                      return element['text'] ==
+                                                          entity.category;
+                                                    },
+                                                    orElse: () => {
+                                                      'color': kPrimaryColor
+                                                    },
+                                                  )['color'],
+                                                ),
                                               ),
                                               Column(
                                                 mainAxisAlignment:

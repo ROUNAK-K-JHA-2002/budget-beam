@@ -50,6 +50,44 @@ List<Map<String, dynamic>> profileItems = [
 ];
 
 List<String> tags = ['food', 'travel', 'entertainment', 'other'];
+List<Map<String, dynamic>> categories = [
+  {
+    "text": "Food & Dining",
+    "icon": Icons.fastfood, // Replace with your icon library if needed
+    "color": Colors.orange,
+  },
+  {
+    "text": "Entertainment",
+    "icon": Icons.movie,
+    "color": Colors.purple,
+  },
+  {
+    "text": "Housing",
+    "icon": Icons.home,
+    "color": Colors.blue,
+  },
+  {
+    "text": "Transportation",
+    "icon": Icons.directions_car,
+    "color": Colors.green,
+  },
+  {
+    "text": "Shopping",
+    "icon": Icons.shopping_bag,
+    "color": Colors.pink,
+  },
+  {
+    "text": "Health & Fitness",
+    "icon": Icons.fitness_center,
+    "color": Colors.red,
+  },
+  {
+    "text": "Savings & Investments",
+    "icon": Icons.savings,
+    "color": Colors.teal,
+  },
+];
+
 List<String> types = ['Spend', 'Income'];
 
 Map<String, dynamic> generateColorAndAbbreviation(String inputString, int? id) {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CustomDropdown extends StatefulWidget {
-  final List<String> options;
+  final List<Map<String, dynamic>> options;
   final Function(String) onChanged;
 
   const CustomDropdown(
@@ -18,7 +19,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   void initState() {
     super.initState();
-    selectedOption = widget.options.first;
+    selectedOption = widget.options.first['text'];
   }
 
   @override
@@ -40,24 +41,34 @@ class _CustomDropdownState extends State<CustomDropdown> {
       child: DropdownButton<String>(
         value: selectedOption,
         onChanged: (String? newValue) {
-          print(newValue);
           setState(() {
             selectedOption = newValue!;
             widget.onChanged(selectedOption);
           });
         },
-        items: widget.options.map<DropdownMenuItem<String>>((String value) {
+        items: widget.options
+            .map<DropdownMenuItem<String>>((Map<String, dynamic> option) {
           return DropdownMenuItem<String>(
-            value: value,
-            child: Text(
-              value,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
-              ),
-            ),
-          );
+              value: option['text'],
+              child: Row(
+                children: [
+                  Icon(
+                    option['icon'],
+                    color: option['color'],
+                  ),
+                  SizedBox(
+                    width: 2.w,
+                  ),
+                  Text(
+                    option['text'],
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                ],
+              ));
         }).toList(),
         icon: Icon(
           Icons.arrow_drop_down,

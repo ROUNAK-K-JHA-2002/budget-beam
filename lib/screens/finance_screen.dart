@@ -1,4 +1,5 @@
-import 'package:budgetbeam/components/LineChartGraph.dart';
+import 'package:budgetbeam/components/line_graph.dart';
+import 'package:budgetbeam/components/pie_chart_graph.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
 import 'package:budgetbeam/services/chart_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
@@ -20,6 +21,15 @@ class FinanceScreen extends ConsumerWidget {
     late ValueNotifier<String> selectedType = ValueNotifier("All Transactions");
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: kPrimaryColor,
+          onPressed: () {
+            Navigator.pushNamed(context, '/add-expense');
+          },
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          )),
       body: SafeArea(
           child: Container(
         width: 100.w,
@@ -204,8 +214,7 @@ class FinanceScreen extends ConsumerWidget {
                               return ListView.builder(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 2.w, vertical: 1.h),
-                                itemCount:
-                                    entities.length > 4 ? 4 : entities.length,
+                                itemCount: entities.length,
                                 itemBuilder: (context, index) {
                                   if (selectedType.value ==
                                       "All Transactions") {
@@ -243,14 +252,40 @@ class FinanceScreen extends ConsumerWidget {
                                                 height: 5.h,
                                                 width: 5.h,
                                                 decoration: BoxDecoration(
-                                                    color: Colors.grey.shade200,
+                                                    color:
+                                                        categories.firstWhere(
+                                                      (element) {
+                                                        return element[
+                                                                'text'] ==
+                                                            entity.category;
+                                                      },
+                                                      orElse: () => {
+                                                        'color': kPrimaryColor
+                                                      },
+                                                    )['color'][100],
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15)),
-                                                child: Text(entity.name,
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600)),
+                                                child: Icon(
+                                                  categories.firstWhere(
+                                                      (element) {
+                                                    return element['text'] ==
+                                                        entity.category;
+                                                  },
+                                                      orElse: () => {
+                                                            'color':
+                                                                kPrimaryColor
+                                                          })['icon'],
+                                                  color: categories.firstWhere(
+                                                    (element) {
+                                                      return element['text'] ==
+                                                          entity.category;
+                                                    },
+                                                    orElse: () => {
+                                                      'color': kPrimaryColor
+                                                    },
+                                                  )['color'],
+                                                ),
                                               ),
                                               Column(
                                                 mainAxisAlignment:
@@ -267,20 +302,35 @@ class FinanceScreen extends ConsumerWidget {
                                                           fontSize: 16.sp,
                                                           fontWeight:
                                                               FontWeight.w600)),
-                                                  Text(formatDate(
-                                                      entity.dateCreated))
+                                                  Text(
+                                                    entity.category,
+                                                    style: TextStyle(
+                                                        fontSize: 13.sp),
+                                                  )
                                                 ],
                                               )
                                             ],
                                           ),
-                                          Text(
-                                              "${entity.type == "income" ? "+" : "-"} ₹${entity.amount}",
-                                              style: TextStyle(
-                                                  fontSize: 16.sp,
-                                                  color: entity.type == "income"
-                                                      ? Colors.green
-                                                      : Colors.red,
-                                                  fontWeight: FontWeight.w600))
+                                          Column(
+                                            children: [
+                                              Text(
+                                                  "${entity.type == "income" ? "+" : "-"} ₹${entity.amount}",
+                                                  style: TextStyle(
+                                                      fontSize: 16.sp,
+                                                      color: entity.type ==
+                                                              "income"
+                                                          ? Colors.green
+                                                          : Colors.red,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                              Text(
+                                                formatDate(entity.dateCreated),
+                                                style: TextStyle(
+                                                  fontSize: 13.sp,
+                                                ),
+                                              ),
+                                            ],
+                                          )
                                         ]),
                                   );
                                 },
@@ -297,11 +347,36 @@ class FinanceScreen extends ConsumerWidget {
                   ),
                 ),
                 // ,
-                Container(
-                  width: 100.w,
-                  height: 50.h,
-                  child: Text("Analyze"),
-                )
+                SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 3.w),
+                      width: 100.w,
+                      // height: 40.h,
+                      child: asyncExpenses.when(
+                          data: (data) => LineGraph(expenses: data),
+                          error: (error, stack) =>
+                              Center(child: Text("Error: $error")),
+                          loading: () =>
+                              const Center(child: CircularProgressIndicator())),
+                    ),
+                    // Container(
+                    //   padding: EdgeInsets.symmetric(horizontal: 3.w),
+                    //   width: 100.w,
+                    //   height: 50.h,
+                    //   // height: 40.h,
+                    //   child: asyncExpenses.when(
+                    //       data: (data) => PieChartGraph(
+                    //             expenses: data,
+                    //           ),
+                    //       error: (error, stack) =>
+                    //           Center(child: Text("Error: $error")),
+                    //       loading: () =>
+                    //           const Center(child: CircularProgressIndicator())),
+                    // )
+                  ],
+                ))
               ]),
             )
           ],
