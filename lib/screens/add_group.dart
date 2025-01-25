@@ -3,23 +3,20 @@
 import 'package:budgetbeam/components/date_picker.dart';
 import 'package:budgetbeam/components/dropdown.dart';
 import 'package:budgetbeam/components/text_field.dart';
-import 'package:budgetbeam/entity/expense_entity.dart';
 import 'package:budgetbeam/services/object_box.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class AddExpense extends StatefulWidget {
-  final ExpenseEntity? expense;
-
-  const AddExpense({this.expense, super.key});
+class AddGroup extends StatefulWidget {
+  const AddGroup({super.key});
 
   @override
-  State<AddExpense> createState() => _AddExpenseState();
+  State<AddGroup> createState() => _AddGroupState();
 }
 
-class _AddExpenseState extends State<AddExpense> {
+class _AddGroupState extends State<AddGroup> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
@@ -34,17 +31,6 @@ class _AddExpenseState extends State<AddExpense> {
   void initState() {
     super.initState();
     _objectBoxStore = ObjectBoxStore.instance;
-    if (widget.expense != null) {
-      setState(() {
-        _nameController.text = widget.expense!.name;
-        _amountController.text = widget.expense!.amount.toString();
-        _date = widget.expense!.dateCreated;
-        _category = widget.expense!.category;
-        selectedIndex.value = types.indexOf(
-            widget.expense!.type[0].toUpperCase() +
-                widget.expense!.type.substring(1).toLowerCase());
-      });
-    }
   }
 
   @override
@@ -199,7 +185,6 @@ class _AddExpenseState extends State<AddExpense> {
                           ),
                           SizedBox(height: 1.h),
                           CustomDropdown(
-                              initialValue: widget.expense?.category,
                               options: categories,
                               onChanged: (value) {
                                 setState(() => _category = value);
@@ -213,11 +198,9 @@ class _AddExpenseState extends State<AddExpense> {
                             ),
                           ),
                           SizedBox(height: 1.h),
-                          CustomDatePicker(
-                              initialDate: widget.expense?.dateCreated,
-                              onDateSelected: (selecteddate) {
-                                setState(() => _date = selecteddate);
-                              }),
+                          CustomDatePicker(onDateSelected: (selecteddate) {
+                            setState(() => _date = selecteddate);
+                          }),
                           SizedBox(height: 4.h),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -253,9 +236,7 @@ class _AddExpenseState extends State<AddExpense> {
                                     ),
                                     duration: const Duration(milliseconds: 50),
                                     child: Text(
-                                      widget.expense != null
-                                          ? "Update"
-                                          : "Save",
+                                      "Save",
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 16.sp),
                                     ),
@@ -272,22 +253,21 @@ class _AddExpenseState extends State<AddExpense> {
   }
 
   void _submitForm(BuildContext context) {
-    try {
-      _objectBoxStore.saveExpenseToDB(
-          widget.expense?.id ?? 0,
-          _nameController.text,
-          int.parse(_amountController.text),
-          _date,
-          _category,
-          types[selectedIndex.value].toLowerCase(),
-          widget.expense != null ? true : false);
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Expense added successfully!')));
-      Navigator.pop(context);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to add expense.')));
-      debugPrint("Failed to save expense: $e");
-    }
+    // try {
+    //   _objectBoxStore.saveExpenseToDB(
+    //       _nameController.text,
+    //       int.parse(_amountController.text),
+    //       _date,
+    //       _category,
+    //       types[selectedIndex.value].toLowerCase(),
+    //       false);
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(content: Text('Expense added successfully!')));
+    //   Navigator.pop(context);
+    // } catch (e) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(content: Text('Failed to add expense.')));
+    //   debugPrint("Failed to save expense: $e");
+    // }
   }
 }

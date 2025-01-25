@@ -22,13 +22,23 @@ class NetBalanceNotifier extends StateNotifier<NetBalanceState> {
     int netSpend = 0;
     int netBalance = 0;
 
+    DateTime now = DateTime.now();
+    DateTime firstDayOfCurrentMonth = DateTime(now.year, now.month, 1);
+    DateTime lastDayOfCurrentMonth =
+        DateTime(now.year, now.month + 1, 1).subtract(const Duration(days: 1));
+
     for (var expense in expenses) {
-      if (expense.type == "income") {
-        netIncome += expense.amount;
-        netBalance += expense.amount;
-      } else {
-        netSpend += expense.amount;
-        netBalance -= expense.amount;
+      if ((expense.dateCreated.isAfter(firstDayOfCurrentMonth) ||
+              expense.dateCreated.isAtSameMomentAs(firstDayOfCurrentMonth)) &&
+          (expense.dateCreated.isBefore(lastDayOfCurrentMonth) ||
+              expense.dateCreated.isAtSameMomentAs(lastDayOfCurrentMonth))) {
+        if (expense.type == "income") {
+          netIncome += expense.amount;
+          netBalance += expense.amount;
+        } else {
+          netSpend += expense.amount;
+          netBalance -= expense.amount;
+        }
       }
     }
 

@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 
 class CustomDatePicker extends StatefulWidget {
   final Function(DateTime) onDateSelected;
+  final DateTime? initialDate;
 
-  CustomDatePicker({required this.onDateSelected});
+  CustomDatePicker({required this.onDateSelected, this.initialDate});
 
   @override
   _CustomDatePickerState createState() => _CustomDatePickerState();
@@ -17,7 +18,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   @override
   void initState() {
     super.initState();
-    selectedDate = DateTime.now();
+    selectedDate = widget.initialDate ?? DateTime.now();
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -25,12 +26,12 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+      lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
             primaryColor: kPrimaryColor,
-            colorScheme: ColorScheme.light(primary: kPrimaryColor),
+            colorScheme: const ColorScheme.light(primary: kPrimaryColor),
             buttonTheme:
                 const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),

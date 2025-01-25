@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:budgetbeam/entity/expense_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:graphic/graphic.dart';
@@ -12,6 +10,7 @@ class LineGraph extends StatefulWidget {
   const LineGraph({required this.expenses, super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LineGraphState createState() => _LineGraphState();
 }
 

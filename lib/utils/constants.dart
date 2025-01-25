@@ -129,3 +129,18 @@ String formatDate(DateTime date) {
     return DateFormat('MMM d, yyyy').format(date);
   }
 }
+
+List<String> monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+];

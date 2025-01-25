@@ -1,8 +1,8 @@
 import 'package:budgetbeam/entity/expense_entity.dart';
-import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
 import 'package:budgetbeam/provider/net_balance_provider.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/screens/add_expense.dart';
 import 'package:budgetbeam/services/ads_service.dart';
 import 'package:budgetbeam/services/object_box.dart';
 import 'package:budgetbeam/services/user_services.dart';
@@ -130,9 +130,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       GestureDetector(
                         onTap: () {
                           // Handle tap action, such as clearing ObjectBox data
-                          ObjectBoxStore.instance.store
-                              .box<ExpenseEntity>()
-                              .removeAll();
                         },
                         child: Container(
                           decoration: user?.hasOnboarded == true
@@ -200,8 +197,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           )
                         ],
                       ),
-                      child: SvgPicture.asset("assets/Images/Card.svg",
-                          width: 95.w),
+                      child: SvgPicture.asset(
+                        "assets/Images/Card.svg",
+                        width: 95.w,
+                      ),
                     ),
                     Container(
                       padding:
@@ -242,7 +241,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ),
                                 ],
                               ),
-                              const Icon(Icons.more_vert, color: Colors.white)
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text("Reset"),
+                                      content: const Text(
+                                          "Are you sure you want to reset your data?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: kPrimaryColor,
+                                          ),
+                                          onPressed: () {
+                                            ObjectBoxStore.instance.store
+                                                .box<ExpenseEntity>()
+                                                .removeAll();
+                                          },
+                                          child: const Text('Reset',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: const Icon(Icons.restart_alt,
+                                    color: Colors.white),
+                              )
                             ],
                           ),
                           Row(
@@ -251,35 +284,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     "Income",
                                     style: TextStyle(
-                                        fontSize: 14, color: Colors.white60),
+                                        fontSize: 17.sp, color: Colors.white60),
                                   ),
                                   Text(
                                     "₹ ${netBalance.netIncome}",
-                                    style: const TextStyle(
-                                        fontSize: 16, color: Colors.white),
+                                    style: TextStyle(
+                                        fontSize: 17.sp, color: Colors.white),
                                   ),
                                 ],
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     "Spendings",
                                     style: TextStyle(
-                                        fontSize: 14, color: Colors.white60),
+                                        fontSize: 17.sp, color: Colors.white60),
                                   ),
                                   Text(
                                     "₹ ${netBalance.netSpend}",
-                                    style: const TextStyle(
-                                        fontSize: 16, color: Colors.white),
+                                    style: TextStyle(
+                                        fontSize: 17.sp, color: Colors.white),
                                   ),
                                 ],
                               )
                             ],
-                          )
+                          ),
+                          // SizedBox(height: 1.h),
+                          Text(
+                              "Data is based on the expenses of the current month",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 14.sp, color: Colors.white60)),
                         ],
                       ),
                     ),
@@ -307,9 +346,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           Text("Recent Transactions",
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w600)),
-                          Text("See all",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400)),
+                          // Text("See all",
+                          //     style: TextStyle(
+                          //         fontSize: 16, fontWeight: FontWeight.w400)),
                         ],
                       ),
 
@@ -341,34 +380,68 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   final entity = entities[index];
                                   // final result = generateColorAndAbbreviation(
                                   //     entity.name, 2);
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.05),
-                                          blurRadius: 5,
-                                          spreadRadius: 2,
-                                        )
-                                      ],
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    margin: EdgeInsets.only(bottom: 2.h),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 1.5.h, horizontal: 3.w),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    EdgeInsets.only(right: 2.w),
-                                                alignment: Alignment.center,
-                                                height: 5.h,
-                                                width: 5.h,
-                                                decoration: BoxDecoration(
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => AddExpense(
+                                                    expense: entity,
+                                                  )));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.05),
+                                            blurRadius: 5,
+                                            spreadRadius: 2,
+                                          )
+                                        ],
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      margin: EdgeInsets.only(bottom: 2.h),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 1.5.h, horizontal: 3.w),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 2.w),
+                                                  alignment: Alignment.center,
+                                                  height: 5.h,
+                                                  width: 5.h,
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          categories.firstWhere(
+                                                        (element) {
+                                                          return element[
+                                                                  'text'] ==
+                                                              entity.category;
+                                                        },
+                                                        orElse: () => {
+                                                          'color': kPrimaryColor
+                                                        },
+                                                      )['color'][100],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15)),
+                                                  child: Icon(
+                                                    categories.firstWhere(
+                                                        (element) {
+                                                      return element['text'] ==
+                                                          entity.category;
+                                                    },
+                                                        orElse: () => {
+                                                              'color':
+                                                                  kPrimaryColor
+                                                            })['icon'],
                                                     color:
                                                         categories.firstWhere(
                                                       (element) {
@@ -379,57 +452,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                       orElse: () => {
                                                         'color': kPrimaryColor
                                                       },
-                                                    )['color'][100],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
-                                                child: Icon(
-                                                  categories.firstWhere(
-                                                      (element) {
-                                                    return element['text'] ==
-                                                        entity.category;
-                                                  },
-                                                      orElse: () => {
-                                                            'color':
-                                                                kPrimaryColor
-                                                          })['icon'],
-                                                  color: categories.firstWhere(
-                                                    (element) {
-                                                      return element['text'] ==
-                                                          entity.category;
-                                                    },
-                                                    orElse: () => {
-                                                      'color': kPrimaryColor
-                                                    },
-                                                  )['color'],
+                                                    )['color'],
+                                                  ),
                                                 ),
-                                              ),
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(entity.name,
-                                                      style: TextStyle(
-                                                          fontSize: 16.sp,
-                                                          fontWeight:
-                                                              FontWeight.w600)),
-                                                  Text(formatDate(
-                                                      entity.dateCreated))
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                          Text(
-                                              "${entity.type == "income" ? "+" : "-"} ₹${entity.amount}",
-                                              style: TextStyle(
-                                                  fontSize: 16.sp,
-                                                  color: entity.type == "income"
-                                                      ? Colors.green
-                                                      : Colors.red,
-                                                  fontWeight: FontWeight.w600))
-                                        ]),
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(entity.name,
+                                                        style: TextStyle(
+                                                            fontSize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600)),
+                                                    Text(formatDate(
+                                                        entity.dateCreated))
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            Text(
+                                                "${entity.type == "income" ? "+" : "-"} ₹${entity.amount}",
+                                                style: TextStyle(
+                                                    fontSize: 16.sp,
+                                                    color:
+                                                        entity.type == "income"
+                                                            ? Colors.green
+                                                            : Colors.red,
+                                                    fontWeight:
+                                                        FontWeight.w600))
+                                          ]),
+                                    ),
                                   );
                                 },
                               );

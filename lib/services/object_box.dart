@@ -28,10 +28,11 @@ class ObjectBoxStore {
     return ObjectBoxStore._create(store);
   }
 
-  int saveExpenseToDB(
-      String name, int amount, DateTime date, String category, String type) {
+  int saveExpenseToDB(int id, String name, int amount, DateTime date,
+      String category, String type, bool isUpdate) {
     final box = store.box<ExpenseEntity>();
     final expense = ExpenseEntity(
+        id: isUpdate ? id : 0,
         name: name,
         amount: amount,
         dateCreated: date,
@@ -39,6 +40,6 @@ class ObjectBoxStore {
         category: category,
         type: type,
         userId: FirebaseAuth.instance.currentUser!.uid);
-    return box.put(expense, mode: PutMode.insert);
+    return box.put(expense, mode: isUpdate ? PutMode.update : PutMode.insert);
   }
 }

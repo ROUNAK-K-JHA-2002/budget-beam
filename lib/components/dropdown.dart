@@ -3,10 +3,14 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CustomDropdown extends StatefulWidget {
   final List<Map<String, dynamic>> options;
+  final String? initialValue;
   final Function(String) onChanged;
 
   const CustomDropdown(
-      {super.key, required this.options, required this.onChanged});
+      {super.key,
+      required this.options,
+      required this.onChanged,
+      this.initialValue});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -19,7 +23,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   void initState() {
     super.initState();
-    selectedOption = widget.options.first['text'];
+    selectedOption = widget.initialValue ?? widget.options.first['text'];
   }
 
   @override

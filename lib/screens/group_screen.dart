@@ -1,10 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:budgetbeam/main.dart';
-import 'package:budgetbeam/provider/user_provider.dart';
+// import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -13,8 +11,8 @@ class GroupScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hasAllowedGroupFeature =
-        ref.read(userNotifierProvider)!.hasAllowedGroupFeature;
+    // final hasAllowedGroupFeature =
+    //     ref.read(userNotifierProvider)!.hasAllowedGroupFeature;
 
     return Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -41,7 +39,7 @@ class GroupScreen extends ConsumerWidget {
               children: [
                 Container(
                   width: 100.w,
-                  height: 7.h,
+                  height: 8.h,
                   decoration: const BoxDecoration(
                     color: kPrimaryColor,
                     borderRadius: BorderRadius.only(
@@ -50,14 +48,14 @@ class GroupScreen extends ConsumerWidget {
                     ),
                   ),
                   child: Center(
-                    child: Text("Group",
+                    child: Text("Split Bills",
                         style: TextStyle(color: Colors.white, fontSize: 20.sp)),
                   ),
                 ),
                 Expanded(
                   child: Container(
                     // color: Colors.red,
-                    child: Text("Coming Soon"),
+                    child: const Text("Coming Soon"),
                   ),
                 )
               ],
