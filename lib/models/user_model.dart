@@ -2,8 +2,7 @@ class UserModel {
   final DateTime createdAt;
   final String userId;
   final String email;
-  final String groupId;
-  final String groupName;
+  final List<Group> groups; // Updated to include a list of Group objects
   final bool hasAllowedGroupFeature;
   final bool hasOnboarded;
   final bool isConsentUsingApp;
@@ -15,8 +14,7 @@ class UserModel {
     required this.createdAt,
     required this.userId,
     required this.email,
-    required this.groupId,
-    required this.groupName,
+    required this.groups, // Updated constructor
     required this.hasAllowedGroupFeature,
     required this.hasOnboarded,
     required this.isConsentUsingApp,
@@ -30,8 +28,9 @@ class UserModel {
       createdAt: DateTime.parse(json['created_at']),
       email: json['email'],
       userId: json['user_id'],
-      groupId: json['group_id'],
-      groupName: json['group_name'],
+      groups: (json['groups'] as List)
+          .map((groupJson) => Group.fromJson(groupJson))
+          .toList(), // Updated to parse groups
       hasAllowedGroupFeature: json['has_allowed_group_feature'],
       hasOnboarded: json['has_onboarded'],
       isConsentUsingApp: json['is_consent_using_app'],
@@ -45,15 +44,44 @@ class UserModel {
     return {
       'created_at': createdAt.toIso8601String(),
       'email': email,
-      'group_id': groupId,
       'user_id': userId,
-      'group_name': groupName,
+      'groups': groups
+          .map((group) => group.toJson())
+          .toList(), // Updated to serialize groups
       'has_allowed_group_feature': hasAllowedGroupFeature,
       'has_onboarded': hasOnboarded,
       'is_consent_using_app': isConsentUsingApp,
       'name': name,
       'plan': plan,
       'profile_photo': profilePhoto,
+    };
+  }
+}
+
+class Group {
+  final String id;
+  final bool isAdmin;
+  final String name;
+
+  Group({
+    required this.id,
+    required this.isAdmin,
+    required this.name,
+  });
+
+  factory Group.fromJson(Map<String, dynamic> json) {
+    return Group(
+      id: json['id'],
+      isAdmin: json['is_admin'],
+      name: json['name'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'is_admin': isAdmin,
+      'name': name,
     };
   }
 }

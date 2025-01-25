@@ -1,8 +1,6 @@
 import 'package:budgetbeam/components/button.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class Upgrade extends StatefulWidget {
@@ -13,63 +11,63 @@ class Upgrade extends StatefulWidget {
 }
 
 class _UpgradeState extends State<Upgrade> {
-  late Razorpay _razorpay;
+  // late Razorpay _razorpay;
 
-  @override
-  void initState() {
-    super.initState();
-    _razorpay = Razorpay();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _razorpay = Razorpay();
 
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-  }
+  //   _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+  //   _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+  //   _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  // }
 
-  @override
-  void dispose() {
-    _razorpay.clear(); // Clean up the Razorpay instance
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _razorpay.clear(); // Clean up the Razorpay instance
+  //   super.dispose();
+  // }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    // Handle successful payment
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   // Handle successful payment
 
-    // You can navigate or show a confirmation
-  }
+  //   // You can navigate or show a confirmation
+  // }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    debugPrint("Payment failed: ${response.code} | ${response.message}");
-  }
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   debugPrint("Payment failed: ${response.code} | ${response.message}");
+  // }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    // Handle external wallet selection
-    debugPrint("External Wallet selected: ${response.walletName}");
-  }
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   // Handle external wallet selection
+  //   debugPrint("External Wallet selected: ${response.walletName}");
+  // }
 
-  void openCheckout() {
-    var options = {
-      'key': dotenv.env['RAZORPAY_TEST_KEY_ID'],
-      'amount':
-          50000, // Amount in the smallest currency unit (e.g., paise for INR)
-      'name': 'Budget Beam',
-      'image':
-          'https://res.cloudinary.com/dp72bbxe2/image/upload/v1737540709/lirn8tvdxfctxzxdk0sr.png',
-      'description': 'One-time Payment',
-      'prefill': {
-        'contact': '1234567890',
-        'email': 'user@example.com',
-      },
-      'theme': {
-        'color': '#5F33E1',
-      },
-    };
+  // void openCheckout() {
+  //   var options = {
+  //     'key': dotenv.env['RAZORPAY_TEST_KEY_ID'],
+  //     'amount':
+  //         50000, // Amount in the smallest currency unit (e.g., paise for INR)
+  //     'name': 'Budget Beam',
+  //     'image':
+  //         'https://res.cloudinary.com/dp72bbxe2/image/upload/v1737540709/lirn8tvdxfctxzxdk0sr.png',
+  //     'description': 'One-time Payment',
+  //     'prefill': {
+  //       'contact': '1234567890',
+  //       'email': 'user@example.com',
+  //     },
+  //     'theme': {
+  //       'color': '#5F33E1',
+  //     },
+  //   };
 
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      debugPrint("Error: $e");
-    }
-  }
+  //   try {
+  //     _razorpay.open(options);
+  //   } catch (e) {
+  //     debugPrint("Error: $e");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +139,7 @@ class _UpgradeState extends State<Upgrade> {
             text: "Upgrade for Rs. 99",
             icon: const Icon(Icons.arrow_forward),
             onPressed: () {
-              openCheckout();
+              // openCheckout();
             },
           ),
           SizedBox(height: 2.h),

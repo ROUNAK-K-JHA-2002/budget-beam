@@ -62,12 +62,12 @@ class FinanceScreen extends ConsumerWidget {
                         child: Container(
                             width: 50.w,
                             alignment: Alignment.center,
-                            child: const Text("ListView"))),
+                            child: const Text("List View"))),
                     Tab(
                         child: Container(
                             width: 40.w,
                             alignment: Alignment.center,
-                            child: const Text("Analyze"))),
+                            child: const Text("Chart View"))),
                   ]),
             ),
             Expanded(

@@ -127,7 +127,7 @@ class HomeScreen extends ConsumerWidget {
                                 )
                               : null, // No border for non-premium users
                           padding: user?.hasOnboarded == true
-                              ? EdgeInsets.all(4.0)
+                              ? const EdgeInsets.all(4.0)
                               : EdgeInsets.zero, // Border thickness
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
