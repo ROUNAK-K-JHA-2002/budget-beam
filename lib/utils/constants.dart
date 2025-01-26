@@ -64,7 +64,7 @@ List<Map<String, dynamic>> categories = [
   {
     "text": "Transportation",
     "icon": Icons.directions_car,
-    "color": Colors.green,
+    "color": Colors.yellow,
   },
   {
     "text": "Shopping",
@@ -81,6 +81,16 @@ List<Map<String, dynamic>> categories = [
     "icon": Icons.savings,
     "color": Colors.teal,
   },
+  {
+    "text": "Salary",
+    "icon": Icons.attach_money,
+    "color": Colors.green,
+  },
+  {
+    "text": "Other",
+    "icon": Icons.more,
+    "color": Colors.grey,
+  }
 ];
 
 List<String> types = ['Spend', 'Income'];

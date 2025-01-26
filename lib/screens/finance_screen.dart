@@ -1,3 +1,4 @@
+import 'package:budgetbeam/components/analysis.dart';
 import 'package:budgetbeam/components/banner_ads_widget.dart';
 import 'package:budgetbeam/components/line_graph.dart';
 import 'package:budgetbeam/main.dart';
@@ -96,7 +97,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
   Widget build(BuildContext context) {
     final asyncExpenses = ref.watch(expenseProvider);
     final TabController tabController =
-        TabController(length: 2, vsync: Scaffold.of(context));
+        TabController(length: 3, vsync: Scaffold.of(context));
     // late ValueNotifier<String> selectedFilter = ValueNotifier("All");
     late ValueNotifier<String> selectedType = ValueNotifier("Overall");
 
@@ -155,9 +156,10 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                   ),
                   child: TabBar(
                       controller: tabController,
+                      isScrollable: false,
                       onTap: (index) {
                         if (index == 1) {
-                          showInterstitialAd();
+                          // showInterstitialAd();
                           // _incrementChartViewCount();
                         }
                       },
@@ -174,12 +176,17 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                             child: Container(
                                 width: 80.w,
                                 alignment: Alignment.center,
-                                child: const Text("List View"))),
+                                child: const Text("List"))),
                         Tab(
                             child: Container(
                                 width: 40.w,
                                 alignment: Alignment.center,
-                                child: const Text("Chart View"))),
+                                child: const Text("Chart"))),
+                        Tab(
+                            child: Container(
+                                width: 40.w,
+                                alignment: Alignment.center,
+                                child: const Text("Analysis"))),
                       ]),
                 )),
             Expanded(
@@ -487,22 +494,20 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                           loading: () =>
                               const Center(child: CircularProgressIndicator())),
                     ),
-                    // Container(
-                    //   padding: EdgeInsets.symmetric(horizontal: 3.w),
-                    //   width: 100.w,
-                    //   height: 50.h,
-                    //   // height: 40.h,
-                    //   child: asyncExpenses.when(
-                    //       data: (data) => PieChartGraph(
-                    //             expenses: data,
-                    //           ),
-                    //       error: (error, stack) =>
-                    //           Center(child: Text("Error: $error")),
-                    //       loading: () =>
-                    //           const Center(child: CircularProgressIndicator())),
-                    // )
                   ],
-                ))
+                )),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 3.w),
+                  width: 100.w,
+                  height: 50.h,
+                  // height: 40.h,
+                  child: asyncExpenses.when(
+                      data: (data) => Analysis(expenses: data),
+                      error: (error, stack) =>
+                          Center(child: Text("Error: $error")),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator())),
+                )
               ]),
             )
           ],

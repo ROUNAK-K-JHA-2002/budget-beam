@@ -26,12 +26,17 @@ class _BannerAdsWidgetState extends State<BannerAdsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 0.5.h),
-      width: bannerAd.size.width.toDouble(),
-      height: bannerAd.size.height.toDouble(),
-      alignment: Alignment.center,
-      child: AdWidget(ad: bannerAd..load()),
-    );
+    return bannerAd.responseInfo == null
+        ? SizedBox.shrink()
+        : Container(
+            margin: EdgeInsets.symmetric(vertical: 0.5.h),
+            width: bannerAd.size.width.toDouble(),
+            height: bannerAd.responseInfo!.responseId == null
+                ? 0
+                : bannerAd.size.height.toDouble(),
+            alignment: Alignment.center,
+            child: SizedBox(),
+            // child: AdWidget(ad: bannerAd),
+          );
   }
 }

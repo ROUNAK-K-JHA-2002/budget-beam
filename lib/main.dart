@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'package:budgetbeam/routes/router.dart';
 import 'package:budgetbeam/services/object_box.dart';
 import 'package:budgetbeam/utils/colors.dart';
