@@ -1,12 +1,9 @@
-import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/screens/finance_screen.dart';
 import 'package:budgetbeam/screens/group_screen.dart';
 import 'package:budgetbeam/screens/home_screen.dart';
 import 'package:budgetbeam/screens/profile_screen.dart';
-import 'package:budgetbeam/services/local_auth_service.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
 class AppTemplate extends StatefulWidget {
@@ -23,18 +20,6 @@ class _AppTemplateState extends State<AppTemplate> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: selectedIndex);
-    checkAppLockStatus();
-  }
-
-  Future<void> checkAppLockStatus() async {
-    final isAppLocked = await storage.read(key: 'appLockEnabled') ?? "false";
-    if (isAppLocked == "true") {
-      final bool didAuthenticate =
-          await authenticate("Authenticate to access the app");
-      if (!didAuthenticate) {
-        SystemNavigator.pop();
-      }
-    }
   }
 
   void onButtonPressed(int index) {

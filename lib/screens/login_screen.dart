@@ -124,34 +124,46 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 5.h),
               Column(
                 children: [
-                  CustomButton(
-                    text: 'Continue with Google',
-                    icon: SvgPicture.asset(
-                      'assets/Images/google.svg',
-                      width: 7.w,
-                      height: 7.w,
-                    ),
-                    onPressed: () {
-                      handleSignInProcess('google', ref);
-                    },
-                  ),
-                  SizedBox(height: 2.h),
                   ValueListenableBuilder(
                     valueListenable: isLoading,
                     builder: (context, value, child) {
                       return CustomButton(
-                        isLoading: isLoading.value,
-                        text: 'Continue Anonymously',
-                        isOutlined: true,
-                        icon: const Icon(
-                          Icons.person,
+                        text: 'Continue with Google',
+                        isLoading: value,
+                        icon: SvgPicture.asset(
+                          'assets/Images/google.svg',
+                          width: 7.w,
+                          height: 7.w,
                         ),
                         onPressed: () {
-                          handleSignInProcess('anonymous', ref);
+                          if (value) {
+                            return;
+                          }
+                          handleSignInProcess('google', ref);
                         },
                       );
                     },
                   ),
+                  SizedBox(height: 2.h),
+                  // ValueListenableBuilder(
+                  //   valueListenable: isLoading,
+                  //   builder: (context, value, child) {
+                  //     return CustomButton(
+                  //       isLoading: isLoading.value,
+                  //       text: 'Continue Anonymously',
+                  //       isOutlined: true,
+                  //       icon: const Icon(
+                  //         Icons.person,
+                  //       ),
+                  //       onPressed: () {
+                  //         if (value) {
+                  //           return;
+                  //         }
+                  //         handleSignInProcess('anonymous', ref);
+                  //       },
+                  //     );
+                  //   },
+                  // ),
                   SizedBox(height: 2.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

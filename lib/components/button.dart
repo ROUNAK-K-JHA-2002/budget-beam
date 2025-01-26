@@ -1,5 +1,6 @@
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CustomButton extends StatelessWidget {
@@ -52,15 +53,15 @@ class CustomButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLoading)
-              const CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 2,
+              LoadingAnimationWidget.waveDots(
+                color: isOutlined ? kPrimaryColor : Colors.white,
+                size: 20.sp,
               )
             else
               icon,
             SizedBox(width: 2.w),
             Text(
-              text,
+              isLoading ? "Please Wait..." : text,
               style: TextStyle(
                 color: isOutlined ? kPrimaryDark : textColor,
                 fontSize: 15.sp,

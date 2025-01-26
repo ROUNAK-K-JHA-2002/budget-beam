@@ -6,14 +6,12 @@ import 'package:budgetbeam/components/invite.dart';
 import 'package:budgetbeam/components/settings.dart';
 import 'package:budgetbeam/components/upgrade.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
-import 'package:budgetbeam/services/ads_service.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {

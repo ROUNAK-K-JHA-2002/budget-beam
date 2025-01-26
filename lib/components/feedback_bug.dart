@@ -4,7 +4,6 @@ import 'package:budgetbeam/models/feedback_model.dart';
 import 'package:budgetbeam/services/feedback_service.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/helpers.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';

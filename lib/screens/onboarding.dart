@@ -2,7 +2,6 @@ import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/screens/login_screen.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
