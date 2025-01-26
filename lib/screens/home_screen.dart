@@ -1,19 +1,15 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:budgetbeam/components/banner_ads_widget.dart';
 import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
 import 'package:budgetbeam/provider/net_balance_provider.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/screens/add_expense.dart';
-import 'package:budgetbeam/services/local_auth_service.dart';
 import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -33,19 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    checkAppLockStatus();
     getDailyBudget();
-  }
-
-  Future<void> checkAppLockStatus() async {
-    final isAppLocked = await storage.read(key: 'appLockEnabled') ?? "false";
-    if (isAppLocked == "true") {
-      final bool didAuthenticate =
-          await authenticate("Authenticate to access the app");
-      if (!didAuthenticate) {
-        SystemNavigator.pop();
-      }
-    }
   }
 
   void getDailyBudget() async {

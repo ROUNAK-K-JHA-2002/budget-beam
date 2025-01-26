@@ -5,6 +5,7 @@ import 'package:budgetbeam/components/feedback_bug.dart';
 import 'package:budgetbeam/components/invite.dart';
 import 'package:budgetbeam/components/settings.dart';
 import 'package:budgetbeam/components/upgrade.dart';
+import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
@@ -18,6 +19,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
@@ -209,6 +211,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     TextButton(
                                       onPressed: () {
                                         FirebaseAuth.instance.signOut();
+                                        storage.deleteAll();
                                         Navigator.pushNamedAndRemoveUntil(
                                             context,
                                             '/login',
