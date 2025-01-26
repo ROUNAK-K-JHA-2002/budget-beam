@@ -354,7 +354,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ValueListenableBuilder(
                               valueListenable: dailyBudget,
                               builder: (context, value, child) {
-                                return netBalance.todaysExpense > value
+                                return netBalance.todaysExpense > value &&
+                                        value != 0
                                     ? Padding(
                                         padding: EdgeInsets.only(bottom: 2.h),
                                         child: Text(

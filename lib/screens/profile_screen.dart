@@ -224,6 +224,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               Icon(
                                 profileItems[index]['icon'],
                                 size: 25,
+                                color: profileItems[index]['color'],
                               ),
                               SizedBox(width: 5.w),
                               Text(

@@ -4,6 +4,7 @@ import 'package:budgetbeam/components/button.dart';
 import 'package:budgetbeam/models/user_model.dart';
 import 'package:budgetbeam/services/sign_in.dart';
 import 'package:budgetbeam/services/user_services.dart';
+import 'package:budgetbeam/utils/helpers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await signInWithGoogle();
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
+        print(user.uid);
         UserModel? firebaseUser = await getUser(user.uid, context, ref);
         if (firebaseUser == null) {
           createUser(
@@ -34,8 +36,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   userId: user.uid,
                   email: user.email ?? '',
                   groups: [],
+                  dailyLimit: '0',
                   hasAllowedGroupFeature: false,
                   hasOnboarded: true,
+                  referralCode: generateStructuredReferralCode(),
                   isConsentUsingApp: true,
                   name: user.displayName ?? '',
                   plan: 'Free Plan',

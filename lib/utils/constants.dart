@@ -6,36 +6,43 @@ List<Map<String, dynamic>> profileItems = [
     "icon": Icons.settings,
     "title": "Settings",
     "route": "/settings",
+    "color": Colors.blue,
   },
   {
     "icon": Icons.diamond,
     "title": "Upgrade to Premium",
     "route": "/upgrade",
+    "color": Colors.purple,
   },
   {
     "icon": Icons.share,
     "title": "Invite Friends",
     "route": "/invite",
+    "color": Colors.green,
   },
   {
     "icon": Icons.admin_panel_settings,
     "title": "Data and Privacy",
     "route": "/data",
+    "color": Colors.red,
   },
   {
     "icon": Icons.backup,
     "title": "Backup and Restore",
     "route": "/backup",
+    "color": Colors.orange,
   },
   {
     "icon": Icons.feedback,
     "title": "Feedback / Bug Report",
     "route": "/developer",
+    "color": Colors.yellow,
   },
   {
     "icon": Icons.logout,
     "title": "Logout",
     "route": "/logout",
+    "color": Colors.grey,
   },
 ];
 

@@ -95,6 +95,7 @@ class _AnalysisState extends State<Analysis> {
   }
 
   Color _getCategoryColor(String category) {
+    print(category);
     return categories.firstWhere(
       (c) => c['text'] == category,
       orElse: () => {'color': Colors.grey},
@@ -254,47 +255,50 @@ class _AnalysisState extends State<Analysis> {
             }),
         SizedBox(height: 1.h),
         Container(
-          height: 30.h,
-          child: categoryData.isEmpty
-              ? const Center(child: Text('No data available'))
-              : Chart(
-                  marks: [
-                    IntervalMark(
-                      label: LabelEncode(
-                          encoder: (tuple) =>
-                              Label(tuple['category'].toString())),
-                      shape: ShapeEncode(
-                          value: RectShape(
-                              borderRadius: BorderRadius.circular(10))),
-                      color: ColorEncode(
-                        variable: 'category',
-                        values: categoryData.length > 1
-                            ? categoryData
-                                .map((data) =>
-                                    _getCategoryColor(data['category']))
-                                .toList()
-                            : [
-                                _getCategoryColor(
-                                    categoryData.first['category']),
-                                _getCategoryColor(
-                                    categoryData.first['category'])
-                              ],
-                      ),
-                    )
-                  ],
-                  data: categoryData,
-                  variables: {
-                    'category': Variable(
-                      accessor: (Map map) => map['category'] as String,
-                    ),
-                    'value': Variable(
-                      accessor: (Map map) => map['value'] as num,
-                      scale: LinearScale(min: 0, marginMax: 0.1),
-                    ),
-                  },
-                  coord: PolarCoord(startRadius: 0.15),
-                ),
-        ),
+            alignment: Alignment.center,
+            height: categoryData.length == 1 ? 10.h : 30.h,
+            child: categoryData.isEmpty
+                ? const Center(child: Text('No data available'))
+                : categoryData.length == 1
+                    ? const Text(
+                        "Alteast 2 data points required to render graph")
+                    : Chart(
+                        marks: [
+                          IntervalMark(
+                            label: LabelEncode(
+                                encoder: (tuple) =>
+                                    Label(tuple['category'].toString())),
+                            shape: ShapeEncode(
+                                value: RectShape(
+                                    borderRadius: BorderRadius.circular(10))),
+                            color: ColorEncode(
+                              variable: 'category',
+                              values: categoryData.length > 1
+                                  ? categoryData
+                                      .map((data) =>
+                                          _getCategoryColor(data['category']))
+                                      .toList()
+                                  : [
+                                      _getCategoryColor(
+                                          categoryData.first['category']),
+                                      _getCategoryColor(
+                                          categoryData.first['category'])
+                                    ],
+                            ),
+                          )
+                        ],
+                        data: categoryData,
+                        variables: {
+                          'category': Variable(
+                            accessor: (Map map) => map['category'] as String,
+                          ),
+                          'value': Variable(
+                            accessor: (Map map) => map['value'] as num,
+                            scale: LinearScale(min: 0, marginMax: 0.1),
+                          ),
+                        },
+                        coord: PolarCoord(startRadius: 0.15),
+                      )),
         // List of categories with line bar indicators
         Expanded(
           child: ListView.builder(

@@ -37,12 +37,14 @@ Future<UserModel?> getUser(
   try {
     DocumentSnapshot doc =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
     if (doc.exists) {
+      print("User retrieved: ${doc.data()}");
       UserModel user = UserModel.fromJson(doc.data() as Map<String, dynamic>);
+
       ref.read(userNotifierProvider.notifier).setUser(user);
       return user;
     } else {
-      showErrorSnackbar("Failed to retrieve user");
       return null;
     }
   } catch (e) {

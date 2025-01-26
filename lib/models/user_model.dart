@@ -2,31 +2,36 @@ class UserModel {
   final DateTime createdAt;
   final String userId;
   final String email;
-  final List<Group> groups; // Updated to include a list of Group objects
+  final List<Group> groups;
   final bool hasAllowedGroupFeature;
   final bool hasOnboarded;
   final bool isConsentUsingApp;
   final String name;
   final String profilePhoto;
   final String plan;
+  final String dailyLimit;
+  final String referralCode;
 
   UserModel({
     required this.createdAt,
     required this.userId,
     required this.email,
-    required this.groups, // Updated constructor
+    required this.dailyLimit,
+    required this.groups,
     required this.hasAllowedGroupFeature,
     required this.hasOnboarded,
     required this.isConsentUsingApp,
     required this.name,
     required this.plan,
     required this.profilePhoto,
+    required this.referralCode,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       createdAt: DateTime.parse(json['created_at']),
       email: json['email'],
+      dailyLimit: json['daily_limit'],
       userId: json['user_id'],
       groups: (json['groups'] as List)
           .map((groupJson) => Group.fromJson(groupJson))
@@ -37,6 +42,7 @@ class UserModel {
       name: json['name'],
       plan: json['plan'],
       profilePhoto: json['profile_photo'],
+      referralCode: json['referral_code'],
     );
   }
 
@@ -54,6 +60,8 @@ class UserModel {
       'name': name,
       'plan': plan,
       'profile_photo': profilePhoto,
+      'daily_limit': dailyLimit,
+      'referral_code': referralCode,
     };
   }
 }

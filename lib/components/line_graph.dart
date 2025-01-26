@@ -324,12 +324,17 @@ class _LineGraphState extends State<LineGraph> {
             child: chartData.isEmpty
                 ? const Center(child: Text('No data available'))
                 : Chart(
-                    marks: [IntervalMark()],
+                    marks: [
+                      IntervalMark(
+                          // label: LabelEncode(
+                          //     encoder: (tuple) => Label(tuple['time'].toString(),
+                          //         LabelStyle(rotation: -45))),
+                          )
+                    ],
                     data: chartData,
                     coord: RectCoord(),
                     variables: {
                       'time': Variable(
-                        // scale: Scale(),
                         accessor: (Map map) => map['time'] as String,
                       ),
                       'value': Variable(

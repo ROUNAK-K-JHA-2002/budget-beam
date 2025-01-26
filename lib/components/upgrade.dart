@@ -136,8 +136,11 @@ class _UpgradeState extends State<Upgrade> {
             fit: BoxFit.cover,
           ),
           CustomButton(
-            text: "Upgrade for Rs. 99",
-            icon: const Icon(Icons.arrow_forward),
+            text: "Upgrade for Rs. 199",
+            icon: const Icon(
+              Icons.arrow_forward,
+              color: Colors.white,
+            ),
             onPressed: () {
               // openCheckout();
             },
