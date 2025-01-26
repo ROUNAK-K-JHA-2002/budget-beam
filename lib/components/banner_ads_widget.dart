@@ -4,6 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class BannerAdsWidget extends StatefulWidget {
+  // ignore: use_super_parameters
   const BannerAdsWidget({Key? key}) : super(key: key);
 
   @override

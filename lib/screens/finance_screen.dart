@@ -95,7 +95,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
   Widget build(BuildContext context) {
     final asyncExpenses = ref.watch(expenseProvider);
     final TabController tabController =
-        TabController(length: 2, vsync: Scaffold.of(context));
+        TabController(length: 2, vsync: Scaffold.of(context), initialIndex: 1);
     // late ValueNotifier<String> selectedFilter = ValueNotifier("All");
     late ValueNotifier<String> selectedType = ValueNotifier("All");
 
@@ -156,7 +156,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                       controller: tabController,
                       onTap: (index) {
                         if (index == 1) {
-                          showInterstitialAd();
+                          // showInterstitialAd();
                           // _incrementChartViewCount();
                         }
                       },
@@ -457,7 +457,8 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                     child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 3.w),
+                      padding:
+                          EdgeInsets.only(left: 5.w, right: 5.w, bottom: 2.h),
                       width: 100.w,
                       // height: 40.h,
                       child: asyncExpenses.when(

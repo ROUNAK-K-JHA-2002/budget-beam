@@ -100,7 +100,9 @@ class _AddExpenseState extends State<AddExpense> {
                               Icons.delete,
                               color: Colors.red,
                             ),
-                          ),
+                          )
+                        else
+                          SizedBox(width: 3.w),
                       ],
                     ),
                   ),

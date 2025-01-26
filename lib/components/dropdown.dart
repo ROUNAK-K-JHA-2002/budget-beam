@@ -5,10 +5,12 @@ class CustomDropdown extends StatefulWidget {
   final List<Map<String, dynamic>> options;
   final String? initialValue;
   final Function(String) onChanged;
+  final bool? isCompact;
 
   const CustomDropdown(
       {super.key,
       required this.options,
+      this.isCompact = false,
       required this.onChanged,
       this.initialValue});
 
@@ -29,7 +31,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.symmetric(
+          horizontal: widget.isCompact! ? 2.w : 3.w,
+          vertical: widget.isCompact! ? 0.1.h : 0.5.h),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -59,6 +63,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   Icon(
                     option['icon'],
                     color: option['color'],
+                    size: widget.isCompact! ? 16.sp : 20.sp,
                   ),
                   SizedBox(
                     width: 2.w,
@@ -66,7 +71,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   Text(
                     option['text'],
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: widget.isCompact! ? 14.sp : 15.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[800],
                     ),
@@ -77,7 +82,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
         icon: Icon(
           Icons.arrow_drop_down,
           color: Colors.grey[800],
-          size: 30,
+          size: widget.isCompact! ? 18.sp : 22.sp,
         ),
         underline: const SizedBox(),
         isExpanded: true,
