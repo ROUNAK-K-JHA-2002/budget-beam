@@ -1,5 +1,6 @@
 import 'package:budgetbeam/components/text_field.dart';
 import 'package:budgetbeam/main.dart';
+import 'package:budgetbeam/services/local_auth_service.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,7 @@ class _SettingsState extends State<Settings> {
 
   final ValueNotifier<String> currencyNotifier = ValueNotifier('INR');
   final TextEditingController dailyBudgetController = TextEditingController();
+  final ValueNotifier<bool> appLockEnabled = ValueNotifier(false);
 
   @override
   void initState() {
@@ -30,12 +32,13 @@ class _SettingsState extends State<Settings> {
   Future<void> _loadDailyLimit() async {
     try {
       String? dailyBudget = await storage.read(key: 'dailyBudget');
-      print('Loaded daily budget: $dailyBudget');
+      String? isAppLocked = await storage.read(key: 'appLockEnabled');
+      appLockEnabled.value = isAppLocked == "true";
       setState(() {
         dailyBudgetController.text = dailyBudget ?? '0';
       });
     } catch (e) {
-      print('Error loading daily budget: $e');
+      debugPrint('Error loading daily budget: $e');
     }
   }
 
@@ -117,6 +120,50 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(
                   fontSize: 15.sp,
                 ),
+              ),
+              SizedBox(height: 2.h),
+
+              Text(
+                "Use App Lock",
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: kPrimaryColor),
+              ),
+              Text(
+                "Lock the app with your fingerprint / face / password.",
+                style: TextStyle(fontSize: 14.sp),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Enable App Lock",
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w600)),
+                  ValueListenableBuilder(
+                    valueListenable: appLockEnabled,
+                    builder: (context, value, child) {
+                      return Switch(
+                          value: value,
+                          onChanged: (value) async {
+                            final isAppLocked =
+                                await storage.read(key: 'appLockEnabled') ??
+                                    "false";
+                            print("isAppLocked: $isAppLocked");
+                            final bool didAuthenticate = await authenticate(
+                                "Authenticate to enable app lock");
+                            if (didAuthenticate) {
+                              final newLockStatus =
+                                  isAppLocked == "true" ? "false" : "true";
+                              await storage.write(
+                                  key: 'appLockEnabled', value: newLockStatus);
+                              print("newLockStatus: $newLockStatus");
+                              appLockEnabled.value = newLockStatus == "true";
+                            }
+                          });
+                    },
+                  ),
+                ],
               ),
               SizedBox(height: 2.h),
               Text(

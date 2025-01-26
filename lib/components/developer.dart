@@ -48,7 +48,7 @@ class _DeveloperState extends State<Developer> {
             ],
           ),
           Text(
-            "Contact the developer here.",
+            "I guess you know me already.",
             style: TextStyle(
               fontSize: 15.sp,
             ),
