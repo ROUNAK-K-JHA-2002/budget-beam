@@ -97,9 +97,9 @@ class _AddExpenseState extends State<AddExpense> {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: const Text("Logout"),
+                                  title: const Text("Delete Expense"),
                                   content: const Text(
-                                      "Are you sure you want to logout?"),
+                                      "Are you sure you want to delete this expense?"),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
@@ -112,6 +112,7 @@ class _AddExpenseState extends State<AddExpense> {
                                         _objectBoxStore.deleteExpenseFromDB(
                                             widget.expense!.id);
 
+                                        Navigator.pop(context);
                                         Navigator.pop(context);
                                       },
                                       child: const Text('Delete',

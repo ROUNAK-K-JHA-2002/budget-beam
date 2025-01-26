@@ -29,7 +29,6 @@ class _LineGraphState extends State<LineGraph> {
     _updateChartData();
   }
 
-  // Update chart data based on filters
   void _changePeriod(int offset) {
     setState(() {
       if (selectedTimeGranularity == 'Weekdays') {

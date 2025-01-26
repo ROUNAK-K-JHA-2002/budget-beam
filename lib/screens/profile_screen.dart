@@ -1,6 +1,5 @@
 import 'package:budgetbeam/components/backup.dart';
 import 'package:budgetbeam/components/data_and_privacy.dart';
-import 'package:budgetbeam/components/developer.dart';
 import 'package:budgetbeam/components/feedback_bug.dart';
 import 'package:budgetbeam/components/invite.dart';
 import 'package:budgetbeam/components/settings.dart';
@@ -174,15 +173,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   context: context,
                                   builder: (context) => const Backup());
                               break;
-                            case "Developer Contact":
-                              showBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  showDragHandle: false,
-                                  context: context,
-                                  builder: (context) => const Developer());
-                              break;
                             case "Feedback / Bug Report":
                               showBottomSheet(
                                   shape: RoundedRectangleBorder(
@@ -251,7 +241,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                 ),
                 Text(
-                  "Version 1.0.0-patch-test-0.35",
+                  "Version 1.0.3-patch-test-0.15",
                   style:
                       TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
                 ),

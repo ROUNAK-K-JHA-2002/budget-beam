@@ -33,11 +33,6 @@ List<Map<String, dynamic>> profileItems = [
     "route": "/developer",
   },
   {
-    "icon": Icons.code,
-    "title": "Developer Contact",
-    "route": "/developer",
-  },
-  {
     "icon": Icons.logout,
     "title": "Logout",
     "route": "/logout",
