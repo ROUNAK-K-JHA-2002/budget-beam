@@ -1,3 +1,4 @@
+import 'package:budgetbeam/components/banner_ads_widget.dart';
 import 'package:budgetbeam/entity/expense_entity.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
 import 'package:budgetbeam/provider/net_balance_provider.dart';
@@ -28,30 +29,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final double budget = 10000;
-
-  @override
-  void initState() {
-    super.initState();
-    bannerAd.load();
-  }
-
-  @override
-  void dispose() {
-    bannerAd.dispose();
-    super.dispose();
-  }
-
-  Widget bannerAdWidget() {
-    return StatefulBuilder(
-      builder: (context, setState) => Container(
-        margin: EdgeInsets.symmetric(vertical: 0.5.h),
-        width: bannerAd.size.width.toDouble(),
-        height: 5.h,
-        alignment: Alignment.center,
-        child: AdWidget(ad: bannerAd..load()),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -353,7 +330,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ],
                       ),
 
-                      bannerAdWidget(),
+                      const BannerAdsWidget(),
                       SizedBox(
                         height: 40.h,
                         width: 90.w,

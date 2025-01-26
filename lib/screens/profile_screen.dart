@@ -190,7 +190,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   ),
                                   showDragHandle: false,
                                   context: context,
-                                  builder: (context) => const FeedbackBug());
+                                  builder: (context) => FeedbackBug(
+                                        email: user?.email ?? "Anonymous User",
+                                      ));
                               break;
                             case "Logout":
                               showDialog(

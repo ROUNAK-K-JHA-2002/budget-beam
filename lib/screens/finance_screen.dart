@@ -1,3 +1,4 @@
+import 'package:budgetbeam/components/banner_ads_widget.dart';
 import 'package:budgetbeam/components/line_graph.dart';
 import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
@@ -270,6 +271,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                                 ),
                               ],
                             ),
+                            const BannerAdsWidget(),
                             SizedBox(
                               height: 65.h,
                               width: 100.w,

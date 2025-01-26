@@ -1,4 +1,5 @@
 import 'package:budgetbeam/main.dart';
+import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 BannerAd bannerAd = BannerAd(
@@ -6,8 +7,8 @@ BannerAd bannerAd = BannerAd(
   adUnitId: bannerAdsId,
   request: const AdRequest(),
   listener: BannerAdListener(onAdLoaded: (ad) {
-    print("Banner Ad Loaded");
+    debugPrint("Banner Ad Loaded");
   }, onAdFailedToLoad: (ad, error) {
-    print("Banner Ad Failed to Load");
+    debugPrint("Banner Ad Failed to Load");
   }),
 );

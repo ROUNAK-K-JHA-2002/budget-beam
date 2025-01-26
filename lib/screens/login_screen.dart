@@ -4,7 +4,6 @@ import 'package:budgetbeam/components/button.dart';
 import 'package:budgetbeam/models/user_model.dart';
 import 'package:budgetbeam/services/sign_in.dart';
 import 'package:budgetbeam/services/user_services.dart';
-import 'package:budgetbeam/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
