@@ -194,39 +194,84 @@ class _LineGraphState extends State<LineGraph> {
             ],
           ),
           SizedBox(height: 1.h),
-          SizedBox(
-            width: 100.w,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 5.w,
-              children: List<Widget>.generate(
-                typeOptions.length,
-                (int index) {
-                  return ValueListenableBuilder(
-                      valueListenable: selectedIndex,
-                      builder: (context, value, child) {
-                        return InputChip(
-                          labelPadding: EdgeInsets.symmetric(
-                              horizontal: 3.w, vertical: 0.2.h),
-                          label: Text(typeOptions[index]['text'] as String),
-                          selected: selectedIndex.value == index,
-                          backgroundColor: Colors.white,
-                          elevation: 2,
-                          showCheckmark: false,
-                          onSelected: (bool selected) {
-                            selectedIndex.value = index;
-                            selectedType = typeOptions[index]['text'] as String;
-                            _updateChartData();
-                          },
-
-                          // onDeleted: () {
-                        );
-                      });
-                },
-              ).toList(),
-            ),
-          ),
+          ValueListenableBuilder(
+              valueListenable: selectedIndex,
+              builder: (context, value, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        selectedIndex.value = 0;
+                        selectedType = typeOptions[0]['text'] as String;
+                        _updateChartData();
+                      },
+                      child: Container(
+                        width: 29.w,
+                        padding: EdgeInsets.symmetric(vertical: 1.h),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: selectedType == "Overall"
+                              ? kPrimaryColor.withOpacity(0.12)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: kPrimaryColor,
+                            width: 0.5,
+                          ),
+                        ),
+                        child: const Text("Overall"),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        selectedIndex.value = 1;
+                        selectedType = typeOptions[1]['text'] as String;
+                        _updateChartData();
+                      },
+                      child: Container(
+                        width: 29.w,
+                        padding: EdgeInsets.symmetric(vertical: 1.h),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: selectedType == "Spend"
+                              ? kPrimaryColor.withOpacity(0.12)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: kPrimaryColor,
+                            width: 0.5,
+                          ),
+                        ),
+                        child: const Text("Spend"),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        selectedIndex.value = 2;
+                        selectedType = typeOptions[2]['text'] as String;
+                        _updateChartData();
+                      },
+                      child: Container(
+                        width: 29.w,
+                        padding: EdgeInsets.symmetric(vertical: 1.h),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: selectedType == "Income"
+                              ? kPrimaryColor.withOpacity(0.12)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: kPrimaryColor,
+                            width: 0.5,
+                          ),
+                        ),
+                        child: const Text("Income"),
+                      ),
+                    ),
+                  ],
+                );
+              }),
           SizedBox(height: 1.h),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),

@@ -42,4 +42,8 @@ class ObjectBoxStore {
         userId: FirebaseAuth.instance.currentUser!.uid);
     return box.put(expense, mode: isUpdate ? PutMode.update : PutMode.insert);
   }
+
+  bool deleteExpenseFromDB(int id) {
+    return expenseBox.remove(id);
+  }
 }

@@ -94,6 +94,33 @@ class _AddExpenseState extends State<AddExpense> {
                         if (widget.expense != null)
                           IconButton(
                             onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text("Logout"),
+                                  content: const Text(
+                                      "Are you sure you want to logout?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        _objectBoxStore.deleteExpenseFromDB(
+                                            widget.expense!.id);
+
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Delete',
+                                          style: TextStyle(color: Colors.red)),
+                                    ),
+                                  ],
+                                ),
+                              );
+
                               //  showDialog(context: context, builder: (conte;)
                             },
                             icon: const Icon(
@@ -164,6 +191,7 @@ class _AddExpenseState extends State<AddExpense> {
                           SizedBox(height: 1.h),
                           CustomTextField(
                             hintText: 'Enter Amount',
+                            textInputType: TextInputType.number,
                             prefixIcon: const Icon(Icons.currency_rupee),
                             controller: _amountController,
                           ),

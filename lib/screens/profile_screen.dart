@@ -250,7 +250,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                 ),
                 Text(
-                  "Version 1.0.0-patch-test-0.27",
+                  "Version 1.0.0-patch-test-0.35",
                   style:
                       TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
                 ),

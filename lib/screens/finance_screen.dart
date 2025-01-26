@@ -2,6 +2,7 @@ import 'package:budgetbeam/components/banner_ads_widget.dart';
 import 'package:budgetbeam/components/line_graph.dart';
 import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
+import 'package:budgetbeam/screens/add_expense.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -95,9 +96,9 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
   Widget build(BuildContext context) {
     final asyncExpenses = ref.watch(expenseProvider);
     final TabController tabController =
-        TabController(length: 2, vsync: Scaffold.of(context), initialIndex: 1);
+        TabController(length: 2, vsync: Scaffold.of(context));
     // late ValueNotifier<String> selectedFilter = ValueNotifier("All");
-    late ValueNotifier<String> selectedType = ValueNotifier("All");
+    late ValueNotifier<String> selectedType = ValueNotifier("Overall");
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -156,7 +157,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                       controller: tabController,
                       onTap: (index) {
                         if (index == 1) {
-                          // showInterstitialAd();
+                          showInterstitialAd();
                           // _incrementChartViewCount();
                         }
                       },
@@ -205,7 +206,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    selectedType.value = "All";
+                                    selectedType.value = "Overall";
                                   },
                                   child: Container(
                                     width: 29.w,
@@ -213,7 +214,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                                         EdgeInsets.symmetric(vertical: 1.h),
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: selectedType.value == "All"
+                                      color: selectedType.value == "Overall"
                                           ? kPrimaryColor.withOpacity(0.12)
                                           : Colors.transparent,
                                       borderRadius: BorderRadius.circular(10),
@@ -222,12 +223,12 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                                         width: 0.5,
                                       ),
                                     ),
-                                    child: const Text("All"),
+                                    child: const Text("Overall"),
                                   ),
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    selectedType.value = "Expense";
+                                    selectedType.value = "Spend";
                                   },
                                   child: Container(
                                     width: 29.w,
@@ -235,7 +236,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                                         EdgeInsets.symmetric(vertical: 1.h),
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: selectedType.value == "Expense"
+                                      color: selectedType.value == "Spend"
                                           ? kPrimaryColor.withOpacity(0.12)
                                           : Colors.transparent,
                                       borderRadius: BorderRadius.circular(10),
@@ -244,7 +245,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                                         width: 0.5,
                                       ),
                                     ),
-                                    child: const Text("Expense"),
+                                    child: const Text("Spend"),
                                   ),
                                 ),
                                 GestureDetector(
@@ -281,11 +282,10 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                                     return const Center(
                                         child: Text("No expenses found"));
                                   } else {
-                                    if (selectedType.value == "All") {
+                                    if (selectedType.value == "Overall") {
                                       entities.sort((a, b) => b.dateCreated
                                           .compareTo(a.dateCreated));
-                                    } else if (selectedType.value ==
-                                        "Expense") {
+                                    } else if (selectedType.value == "Spend") {
                                       entities = entities
                                           .where(
                                             (element) =>
@@ -312,38 +312,80 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                                         final entity = entities[index];
                                         // final result = generateColorAndAbbreviation(
                                         //     entity.name, entity.id);
-                                        return Container(
-                                          margin: EdgeInsets.only(bottom: 2.h),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 1.5.h, horizontal: 3.w),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.05),
-                                                blurRadius: 5,
-                                                spreadRadius: 2,
-                                              )
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                      margin: EdgeInsets.only(
-                                                          right: 2.w),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      height: 5.h,
-                                                      width: 5.h,
-                                                      decoration: BoxDecoration(
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AddExpense(
+                                                          expense: entity,
+                                                        )));
+                                          },
+                                          child: Container(
+                                            margin:
+                                                EdgeInsets.only(bottom: 2.h),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 1.5.h,
+                                                horizontal: 3.w),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.05),
+                                                  blurRadius: 5,
+                                                  spreadRadius: 2,
+                                                )
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            right: 2.w),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: 5.h,
+                                                        width: 5.h,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                color: categories
+                                                                    .firstWhere(
+                                                                  (element) {
+                                                                    return element[
+                                                                            'text'] ==
+                                                                        entity
+                                                                            .category;
+                                                                  },
+                                                                  orElse: () =>
+                                                                      {
+                                                                    'color':
+                                                                        kPrimaryColor
+                                                                  },
+                                                                )['color'][100],
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            15)),
+                                                        child: Icon(
+                                                          categories.firstWhere(
+                                                              (element) {
+                                                            return element[
+                                                                    'text'] ==
+                                                                entity.category;
+                                                          },
+                                                              orElse: () => {
+                                                                    'color':
+                                                                        kPrimaryColor
+                                                                  })['icon'],
                                                           color: categories
                                                               .firstWhere(
                                                             (element) {
@@ -356,87 +398,64 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                                                               'color':
                                                                   kPrimaryColor
                                                             },
-                                                          )['color'][100],
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      15)),
-                                                      child: Icon(
-                                                        categories.firstWhere(
-                                                            (element) {
-                                                          return element[
-                                                                  'text'] ==
-                                                              entity.category;
-                                                        },
-                                                            orElse: () => {
-                                                                  'color':
-                                                                      kPrimaryColor
-                                                                })['icon'],
-                                                        color: categories
-                                                            .firstWhere(
-                                                          (element) {
-                                                            return element[
-                                                                    'text'] ==
-                                                                entity.category;
-                                                          },
-                                                          orElse: () => {
-                                                            'color':
-                                                                kPrimaryColor
-                                                          },
-                                                        )['color'],
+                                                          )['color'],
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                            entity.name.replaceAll(
-                                                                entity.name[0],
-                                                                entity.name[0]
-                                                                    .toUpperCase()),
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                              entity.name.replaceAll(
+                                                                  entity
+                                                                      .name[0],
+                                                                  entity.name[0]
+                                                                      .toUpperCase()),
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      16.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600)),
+                                                          Text(
+                                                            entity.category,
                                                             style: TextStyle(
-                                                                fontSize: 16.sp,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600)),
-                                                        Text(
-                                                          entity.category,
+                                                                fontSize:
+                                                                    13.sp),
+                                                          )
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                          "${entity.type == "income" ? "+" : "-"} ₹${entity.amount}",
                                                           style: TextStyle(
-                                                              fontSize: 13.sp),
-                                                        )
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    Text(
-                                                        "${entity.type == "income" ? "+" : "-"} ₹${entity.amount}",
+                                                              fontSize: 16.sp,
+                                                              color: entity
+                                                                          .type ==
+                                                                      "income"
+                                                                  ? Colors.green
+                                                                  : Colors.red,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600)),
+                                                      Text(
+                                                        formatDate(
+                                                            entity.dateCreated),
                                                         style: TextStyle(
-                                                            fontSize: 16.sp,
-                                                            color: entity
-                                                                        .type ==
-                                                                    "income"
-                                                                ? Colors.green
-                                                                : Colors.red,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600)),
-                                                    Text(
-                                                      formatDate(
-                                                          entity.dateCreated),
-                                                      style: TextStyle(
-                                                        fontSize: 13.sp,
+                                                          fontSize: 13.sp,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ]),
+                                                    ],
+                                                  )
+                                                ]),
+                                          ),
                                         );
                                       },
                                     );

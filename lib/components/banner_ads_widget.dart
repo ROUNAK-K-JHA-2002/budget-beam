@@ -29,7 +29,7 @@ class _BannerAdsWidgetState extends State<BannerAdsWidget> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 0.5.h),
       width: bannerAd.size.width.toDouble(),
-      height: 5.h,
+      height: bannerAd.size.height.toDouble(),
       alignment: Alignment.center,
       child: AdWidget(ad: bannerAd..load()),
     );
