@@ -2,9 +2,11 @@ import 'package:budgetbeam/components/analysis.dart';
 import 'package:budgetbeam/components/banner_ads_widget.dart';
 import 'package:budgetbeam/components/dropdown.dart';
 import 'package:budgetbeam/components/line_graph.dart';
+import 'package:budgetbeam/components/upgrade.dart';
 import 'package:budgetbeam/entity/expense_entity.dart';
 import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
+import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/screens/add_expense.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
@@ -170,8 +172,11 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final asyncExpenses = ref.watch(expenseProvider);
+    final user = ref.watch(userNotifierProvider);
     final TabController tabController =
         TabController(length: 3, vsync: Scaffold.of(context));
     // late ValueNotifier<String> selectedFilter = ValueNotifier("All");
@@ -249,19 +254,27 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                       tabs: [
                         Tab(
                             child: Container(
-                                width: 80.w,
                                 alignment: Alignment.center,
                                 child: const Text("List"))),
                         Tab(
                             child: Container(
-                                width: 40.w,
                                 alignment: Alignment.center,
                                 child: const Text("Chart"))),
                         Tab(
                             child: Container(
-                                width: 40.w,
+                                padding: EdgeInsets.symmetric(horizontal: 2.w),
                                 alignment: Alignment.center,
-                                child: const Text("Analysis"))),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text("Analysis"),
+                                    if (user?.plan != "Premium Plan")
+                                      SizedBox(width: 1.w),
+                                    if (user?.plan != "Premium Plan")
+                                      Icon(Icons.lock,
+                                          size: 14.sp, color: kPrimaryColor),
+                                  ],
+                                ))),
                       ]),
                 )),
             Expanded(
@@ -669,18 +682,22 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                         ),
                       ],
                     )),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 3.w),
-                      width: 100.w,
-                      height: 50.h,
-                      // height: 40.h,
-                      child: asyncExpenses.when(
-                          data: (data) => Analysis(expenses: data),
-                          error: (error, stack) =>
-                              Center(child: Text("Error: $error")),
-                          loading: () =>
-                              const Center(child: CircularProgressIndicator())),
-                    )
+                    user?.plan != "Premium Plan"
+                        ? const Upgrade(
+                            isSettingsScreen: false,
+                          )
+                        : Container(
+                            padding: EdgeInsets.symmetric(horizontal: 3.w),
+                            width: 100.w,
+                            height: 50.h,
+                            // height: 40.h,
+                            child: asyncExpenses.when(
+                                data: (data) => Analysis(expenses: data),
+                                error: (error, stack) =>
+                                    Center(child: Text("Error: $error")),
+                                loading: () => const Center(
+                                    child: CircularProgressIndicator())),
+                          )
                   ]),
             )
           ],

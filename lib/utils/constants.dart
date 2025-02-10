@@ -36,7 +36,7 @@ List<Map<String, dynamic>> profileItems = [
     "icon": Icons.feedback,
     "title": "Feedback / Bug Report",
     "route": "/developer",
-    "color": Colors.yellow,
+    "color": Colors.amber,
   },
   {
     "icon": Icons.logout,

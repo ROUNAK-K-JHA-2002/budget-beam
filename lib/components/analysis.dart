@@ -267,7 +267,8 @@ class _AnalysisState extends State<Analysis> {
                           IntervalMark(
                             label: LabelEncode(
                                 encoder: (tuple) =>
-                                    Label(tuple['category'].toString())),
+                                    Label(tuple['category'].toString(), LabelStyle())
+                                ),
                             shape: ShapeEncode(
                                 value: RectShape(
                                     borderRadius: BorderRadius.circular(10))),

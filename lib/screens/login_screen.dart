@@ -27,7 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
       await signInWithGoogle();
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        print(user.uid);
         UserModel? firebaseUser = await getUser(user.uid, context, ref);
         if (firebaseUser == null) {
           createUser(
@@ -44,7 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   name: user.displayName ?? '',
                   plan: 'Free Plan',
                   profilePhoto: user.photoURL ?? ''),
-              context);
+              context,
+              ref);
         }
         Navigator.popAndPushNamed(context, '/');
       }

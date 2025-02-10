@@ -47,58 +47,70 @@ class _AppTemplateState extends State<AppTemplate> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: kPrimaryDark,
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _pageController,
-                children: _listOfWidget,
-              ),
+    return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (!didPop && selectedIndex != 0) {
+            setState(() {
+              selectedIndex = 0;
+            });
+            _pageController.jumpToPage(selectedIndex);
+          } else {
+            SystemNavigator.pop();
+          }
+        },
+        child: Scaffold(
+            backgroundColor: kPrimaryDark,
+            body: Column(
+              children: <Widget>[
+                Expanded(
+                  child: PageView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: _pageController,
+                    children: _listOfWidget,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        bottomNavigationBar: SlidingClippedNavBar.colorful(
-          // backgroundColor: Colors.white,
-          onButtonPressed: onButtonPressed,
-          iconSize: 30,
-          // activeColor: const Color(0xFF01579B),
-          selectedIndex: selectedIndex,
-          barItems: <BarItem>[
-            BarItem(
-              icon: Icons.home_rounded,
-              title: 'Home',
-              activeColor: kPrimaryColor,
-              inactiveColor: Colors.black,
-            ),
-            BarItem(
-              icon: Icons.monetization_on,
-              title: 'Finance',
-              activeColor: kPrimaryColor,
-              inactiveColor: Colors.black,
-            ),
-            // BarItem(
-            //   icon: Icons.insert_chart,
-            //   title: 'View',
-            //   activeColor: kPrimaryColor,
-            //   inactiveColor: Colors.black,
-            // ),
-            BarItem(
-              icon: Icons.group,
-              title: 'Groups',
-              activeColor: kPrimaryColor,
-              inactiveColor: Colors.black,
-            ),
-            BarItem(
-              icon: Icons.person_rounded,
-              title: 'Profile',
-              activeColor: kPrimaryColor,
-              inactiveColor: Colors.black,
-            ),
-          ],
-        ));
+            bottomNavigationBar: SlidingClippedNavBar.colorful(
+              // backgroundColor: Colors.white,
+              onButtonPressed: onButtonPressed,
+              iconSize: 30,
+              // activeColor: const Color(0xFF01579B),
+              selectedIndex: selectedIndex,
+              barItems: <BarItem>[
+                BarItem(
+                  icon: Icons.home_rounded,
+                  title: 'Home',
+                  activeColor: kPrimaryColor,
+                  inactiveColor: Colors.black,
+                ),
+                BarItem(
+                  icon: Icons.monetization_on,
+                  title: 'Finance',
+                  activeColor: kPrimaryColor,
+                  inactiveColor: Colors.black,
+                ),
+                // BarItem(
+                //   icon: Icons.insert_chart,
+                //   title: 'View',
+                //   activeColor: kPrimaryColor,
+                //   inactiveColor: Colors.black,
+                // ),
+                BarItem(
+                  icon: Icons.group,
+                  title: 'Groups',
+                  activeColor: kPrimaryColor,
+                  inactiveColor: Colors.black,
+                ),
+                BarItem(
+                  icon: Icons.person_rounded,
+                  title: 'Profile',
+                  activeColor: kPrimaryColor,
+                  inactiveColor: Colors.black,
+                ),
+              ],
+            )));
   }
 }
 
