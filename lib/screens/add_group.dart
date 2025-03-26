@@ -1,36 +1,36 @@
 // ignore_for_file: unused_field
 
-import 'package:budgetbeam/components/date_picker.dart';
 import 'package:budgetbeam/components/dropdown.dart';
 import 'package:budgetbeam/components/text_field.dart';
+import 'package:budgetbeam/models/user_model.dart';
+import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/services/object_box.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class AddGroup extends StatefulWidget {
+class AddGroup extends ConsumerStatefulWidget {
   const AddGroup({super.key});
 
   @override
-  State<AddGroup> createState() => _AddGroupState();
+  ConsumerState<AddGroup> createState() => _AddGroupState();
 }
 
-class _AddGroupState extends State<AddGroup> {
+class _AddGroupState extends ConsumerState<AddGroup> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
-  String _type = types[0];
-  DateTime _date = DateTime.now();
   String _category = categories[0]['text'];
-  ValueNotifier<int> selectedIndex = ValueNotifier(0);
-
+  final List<Friend> _selectedFriends = [];
+  late List<Friend> _friends;
   late ObjectBoxStore _objectBoxStore;
 
   @override
   void initState() {
     super.initState();
     _objectBoxStore = ObjectBoxStore.instance;
+    _friends = ref.read(userNotifierProvider)!.friends;
   }
 
   @override
@@ -45,14 +45,9 @@ class _AddGroupState extends State<AddGroup> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // SvgPicture.asset(
-                  //   "assets/Images/homeBg.svg",
-                  //   width: 100.w,
-                  // ),
                   Container(
                     height: 10.h,
                     decoration: const BoxDecoration(
-                      // color: kPrimaryColor,
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(16.0),
                           bottomRight: Radius.circular(16.0)),
@@ -69,7 +64,7 @@ class _AddGroupState extends State<AddGroup> {
                               color: Colors.white,
                             )),
                         Text(
-                          "Add Expense",
+                          "Add Group",
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
@@ -101,15 +96,14 @@ class _AddGroupState extends State<AddGroup> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Name",
+                            "Group Name",
                             style: TextStyle(
                               fontSize: 16.sp,
-                              // color: Colors.black,
                             ),
                           ),
                           SizedBox(height: 1.h),
                           CustomTextField(
-                            hintText: 'Enter Name',
+                            hintText: 'Enter Group Name',
                             shadowColor: Colors.grey.shade300,
                             fontSize: 16.0,
                             textColor: Colors.black,
@@ -117,70 +111,9 @@ class _AddGroupState extends State<AddGroup> {
                           ),
                           SizedBox(height: 2.h),
                           Text(
-                            "Amount",
+                            "Category",
                             style: TextStyle(
                               fontSize: 16.sp,
-                              // color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(height: 1.h),
-                          CustomTextField(
-                            hintText: 'Enter Amount',
-                            shadowColor: Colors.grey.shade300,
-                            textInputType: TextInputType.number,
-                            fontSize: 16.0,
-                            textColor: Colors.black,
-                            controller: _amountController,
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            "Type ",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              // color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(height: 1.h),
-                          SizedBox(
-                            width: 100.w,
-                            child: Wrap(
-                              alignment: WrapAlignment.center,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              spacing: 5.w,
-                              children: List<Widget>.generate(
-                                types.length,
-                                (int index) {
-                                  return ValueListenableBuilder(
-                                      valueListenable: selectedIndex,
-                                      builder: (context, value, child) {
-                                        return InputChip(
-                                          labelPadding: EdgeInsets.symmetric(
-                                              horizontal: 10.w,
-                                              vertical: 0.2.h),
-                                          label: Text(types[index]),
-                                          selected:
-                                              selectedIndex.value == index,
-                                          backgroundColor: Colors.white,
-                                          elevation: 2,
-                                          onSelected: (bool selected) {
-                                            selectedIndex.value = index;
-                                            _type = types[index];
-                                          },
-
-                                          // onDeleted: () {
-                                          //
-                                        );
-                                      });
-                                },
-                              ).toList(),
-                            ),
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            "Categories",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              // color: Colors.black,
                             ),
                           ),
                           SizedBox(height: 1.h),
@@ -191,17 +124,43 @@ class _AddGroupState extends State<AddGroup> {
                               }),
                           SizedBox(height: 2.h),
                           Text(
-                            "Date",
+                            "Friends",
                             style: TextStyle(
                               fontSize: 16.sp,
-                              // color: Colors.black,
                             ),
                           ),
                           SizedBox(height: 1.h),
-                          CustomDatePicker(onDateSelected: (selecteddate) {
-                            setState(() => _date = selecteddate);
-                          }),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: _friends.length,
+                              itemBuilder: (context, index) {
+                                return CheckboxListTile(
+                                  title: Text(_friends[index].name),
+                                  value: _selectedFriends
+                                      .contains(_friends[index]),
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      if (value == true) {
+                                        _selectedFriends.add(_friends[index]);
+                                      } else {
+                                        _selectedFriends
+                                            .remove(_friends[index]);
+                                      }
+                                    });
+                                  },
+                                );
+                              },
+                            ),
+                          ),
                           SizedBox(height: 4.h),
+                          Text(
+                            "Note: Group data are synced with Budgetbeam server unlike personal expenses which are stored on the device.",
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          SizedBox(height: 2.h),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -253,21 +212,14 @@ class _AddGroupState extends State<AddGroup> {
   }
 
   void _submitForm(BuildContext context) {
-    // try {
-    //   _objectBoxStore.saveExpenseToDB(
-    //       _nameController.text,
-    //       int.parse(_amountController.text),
-    //       _date,
-    //       _category,
-    //       types[selectedIndex.value].toLowerCase(),
-    //       false);
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(content: Text('Expense added successfully!')));
-    //   Navigator.pop(context);
-    // } catch (e) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(content: Text('Failed to add expense.')));
-    //   debugPrint("Failed to save expense: $e");
-    // }
+    // Implement the logic to save the group to the database
+    // For example:
+    // _objectBoxStore.saveGroupToDB(
+    //     _nameController.text,
+    //     _selectedFriends,
+    //     _category);
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Group added successfully!')));
+    // Navigator.pop(context);
   }
 }

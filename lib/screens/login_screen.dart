@@ -36,17 +36,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   email: user.email ?? '',
                   groups: [],
                   dailyLimit: '0',
-                  hasAllowedGroupFeature: false,
+                  friends: [],
                   hasOnboarded: true,
                   referralCode: generateStructuredReferralCode(),
                   isConsentUsingApp: true,
                   name: user.displayName ?? '',
                   plan: 'Free Plan',
+                  subscriptionPurchaseDate: null,
+                  subscriptionAmount: null,
+                  subscriptionDetails: null,
                   profilePhoto: user.photoURL ?? ''),
               context,
               ref);
         }
-        Navigator.popAndPushNamed(context, '/');
+        Navigator.popAndPushNamed(context, '/', arguments: {"isNewUser": true});
       }
     } else if (type == 'anonymous') {
       User? user = await signInWithAnonymously();

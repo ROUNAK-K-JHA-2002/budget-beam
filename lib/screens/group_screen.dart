@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 // import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/models/user_model.dart';
+import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,71 +13,242 @@ class GroupScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final hasAllowedGroupFeature =
-    //     ref.read(userNotifierProvider)!.hasAllowedGroupFeature;
+    final TabController tabController =
+        TabController(length: 2, vsync: Scaffold.of(context), initialIndex: 1);
+
+    final List<Friend> userFriends = ref.read(userNotifierProvider)!.friends;
+    final List<Group> userGroups = ref.read(userNotifierProvider)!.groups;
 
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-            backgroundColor: kPrimaryColor,
-            onPressed: () {
-              Navigator.pushNamed(context, '/add-expense');
-            },
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-            )),
         body: SafeArea(
-          child: Container(
-            width: 100.w,
-            height: 100.h,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/Images/bg.png"),
-                fit: BoxFit.cover,
+      child: SizedBox(
+        width: 100.w,
+        height: 100.h,
+        child: Column(
+          children: [
+            Container(
+                width: 100.w,
+                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                child: Container(
+                  width: 80.w,
+                  padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 5,
+                        spreadRadius: 2,
+                      )
+                    ],
+                  ),
+                  child: TabBar(
+                      controller: tabController,
+                      onTap: (index) {
+                        if (index == 1) {
+                          // showInterstitialAd();
+                          // _incrementChartViewCount();
+                        }
+                      },
+                      indicator: BoxDecoration(
+                        color: kPrimaryColor.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      labelColor: kPrimaryColor,
+                      splashFactory: InkSplash.splashFactory,
+                      dividerColor: Colors.transparent,
+                      unselectedLabelColor: Colors.black,
+                      tabs: [
+                        Tab(
+                            child: Container(
+                                alignment: Alignment.center,
+                                child: const Text("Groups"))),
+                        Tab(
+                            child: Container(
+                                alignment: Alignment.center,
+                                child: const Text("Friends"))),
+                      ]),
+                )),
+            Expanded(
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5.w),
+                    child: Column(
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Your Groups",
+                                style: TextStyle(fontSize: 16.sp),
+                              ),
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                color: kPrimaryColor,
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/add-group');
+                                },
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.add, color: Colors.white),
+                                    SizedBox(width: 2.w),
+                                    const Text("Add Group",
+                                        style: TextStyle(color: Colors.white)),
+                                  ],
+                                ),
+                              )
+                            ]),
+                        SizedBox(height: 2.h),
+                        Expanded(
+                            child: userGroups.isEmpty
+                                ? Text(
+                                    "No Groups Added yet",
+                                    style: TextStyle(fontSize: 15.sp),
+                                  )
+                                : ListView.builder(
+                                    itemBuilder: (context, index) {
+                                      return const Text("Group");
+                                    },
+                                  ))
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5.w),
+                    child: Column(
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Your Friends",
+                                style: TextStyle(fontSize: 16.sp),
+                              ),
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                color: kPrimaryColor,
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/add-friend');
+                                },
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.add, color: Colors.white),
+                                    SizedBox(width: 2.w),
+                                    const Text("Add Friend",
+                                        style: TextStyle(color: Colors.white)),
+                                  ],
+                                ),
+                              )
+                            ]),
+                        SizedBox(height: 2.h),
+                        Expanded(
+                          child: userFriends.isEmpty
+                              ? Text(
+                                  "No Friends Added yet",
+                                  style: TextStyle(fontSize: 15.sp),
+                                )
+                              : ListView.builder(
+                                  itemCount: userFriends.length,
+                                  itemBuilder: (context, index) {
+                                    if (userFriends.isEmpty) {
+                                      return const Text("No Friends Added yet");
+                                    } else {
+                                      return Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.05),
+                                                blurRadius: 5,
+                                                spreadRadius: 2,
+                                              )
+                                            ],
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 2.h, horizontal: 3.w),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  !userFriends[index]
+                                                          .hasOnboarded
+                                                      ? Container(
+                                                          decoration: BoxDecoration(
+                                                              color: kPrimaryColor
+                                                                  .withOpacity(
+                                                                      0.2),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100)),
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  2.w),
+                                                          child: Icon(
+                                                            Icons.person,
+                                                            color:
+                                                                kPrimaryColor,
+                                                            size: 20.sp,
+                                                          ),
+                                                        )
+                                                      : Image.network(
+                                                          userFriends[index]
+                                                              .profilePicture,
+                                                          width: 10.w,
+                                                          height: 10.w,
+                                                          fit: BoxFit.cover),
+                                                  SizedBox(width: 4.w),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        userFriends[index].name,
+                                                        style: TextStyle(
+                                                            fontSize: 16.sp,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                      Text(userFriends[index]
+                                                          .email),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                              const Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                              )
+                                            ],
+                                          ));
+                                    }
+                                  },
+                                ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
-            ),
-            // padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Container(
-                  width: 100.w,
-                  height: 8.h,
-                  decoration: const BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(16),
-                      bottomRight: Radius.circular(16),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text("Split Bills",
-                        style: TextStyle(color: Colors.white, fontSize: 20.sp)),
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                Container(
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'assets/Images/coming_soon.png',
-                    // height: 20.h,
-                    width: 60.w,
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Still a work in progress—like your weekend plans.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w600,
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ));
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }

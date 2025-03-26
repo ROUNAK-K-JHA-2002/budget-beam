@@ -277,7 +277,17 @@ class _AddExpenseState extends State<AddExpense> {
                                   onDateSelected: (selecteddate) {
                                     setState(() => _date = selecteddate);
                                   }),
-                              SizedBox(height: 4.h),
+                              Expanded(
+                                child: SizedBox(height: 4.h),
+                              ),
+                              Text(
+                                "Note: Personal expenses are stored locally and are not synced to protect privacy, but you can backup in settings. Deleting the app will delete all data permanently.",
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

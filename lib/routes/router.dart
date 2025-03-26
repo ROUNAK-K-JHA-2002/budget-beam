@@ -1,4 +1,6 @@
 import 'package:budgetbeam/screens/add_expense.dart';
+import 'package:budgetbeam/screens/add_friend.dart';
+import 'package:budgetbeam/screens/add_group.dart';
 import 'package:budgetbeam/screens/app_template.dart';
 import 'package:budgetbeam/screens/finance_details_screen.dart';
 import 'package:budgetbeam/screens/finance_screen.dart';
@@ -17,6 +19,8 @@ Map<String, WidgetBuilder> appRoutes = {
   '/profile': (context) => ProfileScreen(),
   '/finance-details': (context) => const FinanceDetailsScreen(),
   '/add-expense': (context) => const AddExpense(),
+  '/add-group': (context) => const AddGroup(),
+  '/add-friend': (context) => const AddFriend(),
 };
 
 void navigateTo(BuildContext context, String route, Object? arguments) {

@@ -3,7 +3,7 @@ class UserModel {
   final String userId;
   final String email;
   final List<Group> groups;
-  final bool hasAllowedGroupFeature;
+  final List<Friend> friends;
   final bool hasOnboarded;
   final bool isConsentUsingApp;
   final String name;
@@ -11,6 +11,9 @@ class UserModel {
   final String plan;
   final String dailyLimit;
   final String referralCode;
+  final DateTime? subscriptionPurchaseDate;
+  final double? subscriptionAmount;
+  final String? subscriptionDetails;
 
   UserModel({
     required this.createdAt,
@@ -18,13 +21,16 @@ class UserModel {
     required this.email,
     required this.dailyLimit,
     required this.groups,
-    required this.hasAllowedGroupFeature,
+    required this.friends,
     required this.hasOnboarded,
     required this.isConsentUsingApp,
     required this.name,
     required this.plan,
     required this.profilePhoto,
     required this.referralCode,
+    required this.subscriptionPurchaseDate,
+    required this.subscriptionAmount,
+    required this.subscriptionDetails,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -35,14 +41,21 @@ class UserModel {
       userId: json['user_id'],
       groups: (json['groups'] as List)
           .map((groupJson) => Group.fromJson(groupJson))
-          .toList(), // Updated to parse groups
-      hasAllowedGroupFeature: json['has_allowed_group_feature'],
+          .toList(),
+      friends: (json['friends'] as List)
+          .map((friendJson) => Friend.fromJson(friendJson))
+          .toList(),
       hasOnboarded: json['has_onboarded'],
       isConsentUsingApp: json['is_consent_using_app'],
       name: json['name'],
       plan: json['plan'],
       profilePhoto: json['profile_photo'],
       referralCode: json['referral_code'],
+      subscriptionPurchaseDate: json['subscription_purchase_date'] != null
+          ? DateTime.parse(json['subscription_purchase_date'])
+          : null,
+      subscriptionAmount: json['subscription_amount']?.toDouble(),
+      subscriptionDetails: json['subscription_details'],
     );
   }
 
@@ -51,10 +64,8 @@ class UserModel {
       'created_at': createdAt.toIso8601String(),
       'email': email,
       'user_id': userId,
-      'groups': groups
-          .map((group) => group.toJson())
-          .toList(), // Updated to serialize groups
-      'has_allowed_group_feature': hasAllowedGroupFeature,
+      'groups': groups.map((group) => group.toJson()).toList(),
+      'friends': friends.map((friend) => friend.toJson()).toList(),
       'has_onboarded': hasOnboarded,
       'is_consent_using_app': isConsentUsingApp,
       'name': name,
@@ -62,6 +73,9 @@ class UserModel {
       'profile_photo': profilePhoto,
       'daily_limit': dailyLimit,
       'referral_code': referralCode,
+      'subscription_purchase_date': subscriptionPurchaseDate,
+      'subscription_amount': subscriptionAmount,
+      'subscription_details': subscriptionDetails,
     };
   }
 }
@@ -90,6 +104,42 @@ class Group {
       'id': id,
       'is_admin': isAdmin,
       'name': name,
+    };
+  }
+}
+
+class Friend {
+  final String id;
+  final String name;
+  final String email;
+  final bool hasOnboarded;
+  final String profilePicture;
+
+  Friend({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.hasOnboarded,
+    required this.profilePicture,
+  });
+
+  factory Friend.fromJson(Map<String, dynamic> json) {
+    return Friend(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      hasOnboarded: json['has_onboarded'],
+      profilePicture: json['profile_picture'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'has_onboarded': hasOnboarded,
+      'profile_picture': profilePicture,
     };
   }
 }

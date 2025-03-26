@@ -29,6 +29,7 @@ class _BannerAdsWidgetState extends ConsumerState<BannerAdsWidget> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userNotifierProvider);
+    print(user);
     return bannerAd.responseInfo == null
         ? const SizedBox.shrink()
         : Container(

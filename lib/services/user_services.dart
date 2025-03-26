@@ -13,22 +13,64 @@ void createUser(UserModel user, BuildContext context, WidgetRef ref) async {
         .collection('users')
         .doc(user.userId)
         .set(user.toJson());
-    showSuccessSnackbar("User created successfully");
+    showSuccessSnackbar("Welcome to Budget Beam");
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('users').get();
+
+    for (var doc in querySnapshot.docs) {
+      List<dynamic> friends = doc['friends'];
+      bool isFriendUpdated = false;
+      for (var friend in friends) {
+        if (friend['email'] == user.email) {
+          friend['profilePhoto'] = user.profilePhoto;
+          friend['isOnboarded'] = user.hasOnboarded;
+          isFriendUpdated = true;
+        }
+      }
+      if (isFriendUpdated) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(doc.id)
+            .update({'friends': friends});
+      }
+    }
+
+    for (var doc in querySnapshot.docs) {
+      if (doc['email'] != user.email) {
+        List<dynamic> friends = doc['friends'];
+        bool isUserInFriendsList =
+            friends.any((friend) => friend['email'] == user.email);
+        if (isUserInFriendsList) {
+          friends.add({
+            'email': doc['email'],
+            'name': doc['name'],
+            'profilePhoto': doc['profilePhoto'],
+            'isOnboarded': doc['isOnboarded'],
+          });
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.userId)
+              .update({'friends': friends});
+        }
+      }
+    }
     ref.read(userNotifierProvider.notifier).setUser(user);
   } catch (e) {
     showErrorSnackbar("Failed to create user: $e");
   }
 }
 
-void updateUser(String userId, Map<String, dynamic> userData,
+Future<void> updateUser(String userId, Map<String, dynamic> userData,
     BuildContext context, WidgetRef ref) async {
+  print(userData);
   try {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .update(userData);
     showSuccessSnackbar("User updated successfully");
-    ref.read(userNotifierProvider.notifier).updateUser(userData);
+
+    getUser(userId, context, ref);
   } catch (e) {
     showErrorSnackbar("Failed to update user: $e");
   }
@@ -41,15 +83,32 @@ Future<UserModel?> getUser(
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     if (doc.exists) {
-      UserModel user = UserModel.fromJson(doc.data() as Map<String, dynamic>);
-
-      ref.read(userNotifierProvider.notifier).setUser(user);
-      return user;
+      ref
+          .read(userNotifierProvider.notifier)
+          .setUser(UserModel.fromJson(doc.data() as Map<String, dynamic>));
+      return doc.data() as UserModel;
     } else {
       return null;
     }
   } catch (e) {
-    showErrorSnackbar("Failed to retrieve user: $e");
+    return null;
+  }
+}
+
+Future<UserModel?> getUserByEmail(String email, BuildContext context) async {
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      return UserModel.fromJson(doc.data() as Map<String, dynamic>);
+    } else {
+      return null;
+    }
+  } catch (e) {
     return null;
   }
 }

@@ -16,8 +16,7 @@ class UserNotifier extends StateNotifier<UserModel?> {
         email: updatedData['email'] ?? state!.email,
         dailyLimit: updatedData['daily_limit'] ?? state!.dailyLimit,
         groups: updatedData['groups'] ?? state!.groups,
-        hasAllowedGroupFeature: updatedData['has_allowed_group_feature'] ??
-            state!.hasAllowedGroupFeature,
+        friends: updatedData['friends'] ?? state!.friends,
         hasOnboarded: updatedData['has_onboarded'] ?? state!.hasOnboarded,
         isConsentUsingApp:
             updatedData['is_consent_using_app'] ?? state!.isConsentUsingApp,
@@ -25,6 +24,12 @@ class UserNotifier extends StateNotifier<UserModel?> {
         plan: updatedData['plan'] ?? state!.plan,
         profilePhoto: updatedData['profile_photo'] ?? state!.profilePhoto,
         referralCode: updatedData['referral_code'] ?? state!.referralCode,
+        subscriptionPurchaseDate: updatedData['subscription_purchase_date'] ??
+            state!.subscriptionPurchaseDate,
+        subscriptionAmount:
+            updatedData['subscription_amount'] ?? state!.subscriptionAmount,
+        subscriptionDetails:
+            updatedData['subscription_details'] ?? state!.subscriptionDetails,
       );
     }
   }
