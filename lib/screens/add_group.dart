@@ -1,12 +1,19 @@
 // ignore_for_file: unused_field
 
+import 'dart:math';
+
+import 'package:budgetbeam/components/button.dart';
 import 'package:budgetbeam/components/dropdown.dart';
 import 'package:budgetbeam/components/text_field.dart';
+import 'package:budgetbeam/models/group_model.dart';
 import 'package:budgetbeam/models/user_model.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/services/object_box.dart';
+import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
+import 'package:budgetbeam/utils/helpers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -22,15 +29,80 @@ class _AddGroupState extends ConsumerState<AddGroup> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   String _category = categories[0]['text'];
-  final List<Friend> _selectedFriends = [];
+  final List<Member> _selectedFriends = [];
   late List<Friend> _friends;
+  late UserModel user;
   late ObjectBoxStore _objectBoxStore;
+  final ValueNotifier<bool> _isLoading = ValueNotifier(false);
 
   @override
   void initState() {
     super.initState();
     _objectBoxStore = ObjectBoxStore.instance;
     _friends = ref.read(userNotifierProvider)!.friends;
+    user = ref.read(userNotifierProvider)!;
+  }
+
+  String generateInviteCode() {
+    final random = Random();
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return String.fromCharCodes(Iterable.generate(
+        6, (_) => characters.codeUnitAt(random.nextInt(characters.length))));
+  }
+
+  void _submitForm(BuildContext context) async {
+    _isLoading.value = true;
+    try {
+      if (_nameController.text.isEmpty) {
+        showErrorSnackbar("Group name cannot be empty");
+        _isLoading.value = false;
+        return;
+      }
+      _selectedFriends.add(Member(
+          id: user.userId, name: user.name, photoUrl: user.profilePhoto));
+      var docRef = await FirebaseFirestore.instance.collection("groups").doc();
+      var groupData = GroupModel(
+          groupId: docRef.id,
+          groupName: _nameController.text,
+          groupCategory: _category,
+          inviteCode: generateInviteCode(),
+          numberOfMembers: 2,
+          totalSpendings: 0,
+          createdAt: DateTime.now(),
+          isPremiumGroup: false,
+          members: _selectedFriends,
+          transactions: []);
+
+      print(groupData.toJson());
+
+      await docRef.set(groupData.toJson());
+
+      for (var member in _selectedFriends) {
+        var userGroupData = Group(
+            id: docRef.id,
+            createdAt: DateTime.now(),
+            isAdmin: true,
+            name: _nameController.text,
+            totalMembers: 2,
+            totalSpendings: 0,
+            groupCategory: _category);
+
+        var userData = {
+          "groups": FieldValue.arrayUnion([userGroupData.toJson()])
+        };
+
+        await updateUser(member.id, userData, context, ref);
+      }
+      await getUser(user.userId, context, ref);
+
+      Navigator.of(context).popUntil((route) {
+        return route.settings.name == "/";
+      });
+    } catch (e) {
+      print(e);
+      showErrorSnackbar("Failed to create group");
+    }
+    _isLoading.value = false;
   }
 
   @override
@@ -103,6 +175,8 @@ class _AddGroupState extends ConsumerState<AddGroup> {
                           ),
                           SizedBox(height: 1.h),
                           CustomTextField(
+                            prefixIcon: Icon(Icons.group),
+                            textInputType: TextInputType.name,
                             hintText: 'Enter Group Name',
                             shadowColor: Colors.grey.shade300,
                             fontSize: 16.0,
@@ -134,21 +208,26 @@ class _AddGroupState extends ConsumerState<AddGroup> {
                             child: ListView.builder(
                               itemCount: _friends.length,
                               itemBuilder: (context, index) {
-                                print(_friends.isEmpty);
                                 return _friends.isEmpty
                                     ? const Text("No friends found")
                                     : CheckboxListTile(
                                         title: Text(_friends[index].name),
-                                        value: _selectedFriends
-                                            .contains(_friends[index]),
+                                        value: _selectedFriends.any((member) =>
+                                            member.id ==
+                                            _friends[index].userId),
                                         onChanged: (bool? value) {
                                           setState(() {
                                             if (value == true) {
-                                              _selectedFriends
-                                                  .add(_friends[index]);
+                                              _selectedFriends.add(Member(
+                                                  id: _friends[index].userId,
+                                                  name: _friends[index].name,
+                                                  photoUrl: _friends[index]
+                                                      .profilePicture));
                                             } else {
-                                              _selectedFriends
-                                                  .remove(_friends[index]);
+                                              _selectedFriends.removeWhere(
+                                                  (member) =>
+                                                      member.id ==
+                                                      _friends[index].userId);
                                             }
                                           });
                                         },
@@ -168,42 +247,20 @@ class _AddGroupState extends ConsumerState<AddGroup> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              GestureDetector(
-                                  onTap: () async {
-                                    _submitForm(context);
-                                  },
-                                  child: AnimatedContainer(
-                                    alignment: Alignment.center,
-                                    width: 80.w,
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 1.5.h),
-                                    decoration: BoxDecoration(
-                                      color: kPrimaryColor,
-                                      border:
-                                          Border.all(color: Colors.transparent),
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: BorderRadius.circular(15),
-                                      boxShadow: const [
-                                        BoxShadow(
+                              ValueListenableBuilder(
+                                  valueListenable: _isLoading,
+                                  builder: (context, value, child) {
+                                    return CustomButton(
+                                        isLoading: value,
+                                        text: "Save",
+                                        icon: Icon(
+                                          Icons.add,
                                           color: Colors.white,
-                                          blurRadius: 20,
-                                          offset: Offset(-2, -2),
                                         ),
-                                        BoxShadow(
-                                          color: Color.fromARGB(
-                                              255, 158, 134, 243),
-                                          blurRadius: 20,
-                                          offset: Offset(2, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    duration: const Duration(milliseconds: 50),
-                                    child: Text(
-                                      "Save",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16.sp),
-                                    ),
-                                  ))
+                                        onPressed: () {
+                                          _submitForm(context);
+                                        });
+                                  })
                             ],
                           )
                         ],
@@ -213,17 +270,5 @@ class _AddGroupState extends ConsumerState<AddGroup> {
                 ]),
           ),
         ));
-  }
-
-  void _submitForm(BuildContext context) {
-    // Implement the logic to save the group to the database
-    // For example:
-    // _objectBoxStore.saveGroupToDB(
-    //     _nameController.text,
-    //     _selectedFriends,
-    //     _category);
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Group added successfully!')));
-    // Navigator.pop(context);
   }
 }

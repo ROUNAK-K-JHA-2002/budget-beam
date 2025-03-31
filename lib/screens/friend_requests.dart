@@ -48,6 +48,7 @@ class _FriendRequestScreenState extends ConsumerState<FriendRequestScreen> {
       var document = querySnapshot.docs.first;
       //update friend's friend list
       final friend_1 = Friend(
+          userId: user.userId,
           name: user.name,
           email: user.email,
           profilePicture: user.profilePhoto);
@@ -61,6 +62,7 @@ class _FriendRequestScreenState extends ConsumerState<FriendRequestScreen> {
       //update my friend list
 
       final friend = Friend(
+          userId: document.data()['user_id'],
           name: document.data()['name'],
           email: document.data()['email'],
           profilePicture: document.data()['profile_photo']);

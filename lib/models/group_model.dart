@@ -2,6 +2,7 @@ class GroupModel {
   final String groupId;
   final String groupName;
   final String inviteCode;
+  final String groupCategory;
   final int numberOfMembers;
   final int totalSpendings;
   final DateTime createdAt;
@@ -12,6 +13,7 @@ class GroupModel {
   GroupModel({
     required this.groupId,
     required this.groupName,
+    required this.groupCategory,
     required this.inviteCode,
     required this.numberOfMembers,
     required this.totalSpendings,
@@ -25,6 +27,7 @@ class GroupModel {
     return GroupModel(
       groupId: json['group_id'],
       groupName: json['group_name'],
+      groupCategory: json['group_category'],
       inviteCode: json['invite_code'],
       numberOfMembers: json['number_of_members'],
       totalSpendings: json['total_spendings'],
@@ -43,6 +46,7 @@ class GroupModel {
     return {
       'group_id': groupId,
       'group_name': groupName,
+      'group_category': groupCategory,
       'invite_code': inviteCode,
       'number_of_members': numberOfMembers,
       'total_spendings': totalSpendings,

@@ -50,8 +50,13 @@ List<String> tags = ['food', 'travel', 'entertainment', 'other'];
 List<Map<String, dynamic>> categories = [
   {
     "text": "Food & Dining",
-    "icon": Icons.fastfood, // Replace with your icon library if needed
+    "icon": Icons.fastfood,
     "color": Colors.orange,
+  },
+  {
+    "text": "Trip",
+    "icon": Icons.flight,
+    "color": Colors.amber,
   },
   {
     "text": "Entertainment",

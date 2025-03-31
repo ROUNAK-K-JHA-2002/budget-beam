@@ -82,38 +82,56 @@ class UserModel {
 
 class Group {
   final String id;
+  final DateTime createdAt;
   final bool isAdmin;
   final String name;
+  final String groupCategory;
+  final int totalSpendings;
+  final int totalMembers;
 
   Group({
     required this.id,
+    required this.createdAt,
     required this.isAdmin,
     required this.name,
+    required this.groupCategory,
+    required this.totalSpendings,
+    required this.totalMembers,
   });
 
   factory Group.fromJson(Map<String, dynamic> json) {
     return Group(
       id: json['id'],
+      createdAt: json['created_at'],
       isAdmin: json['is_admin'],
       name: json['name'],
+      groupCategory: json['group_category'],
+      totalSpendings: json['total_spendings'],
+      totalMembers: json['total_members'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'created_at': createdAt,
       'is_admin': isAdmin,
       'name': name,
+      'group_category': groupCategory,
+      'total_spendings': totalSpendings,
+      'total_members': totalMembers,
     };
   }
 }
 
 class Friend {
+  final String userId;
   final String name;
   final String email;
   final String profilePicture;
 
   Friend({
+    required this.userId,
     required this.name,
     required this.email,
     required this.profilePicture,
@@ -121,6 +139,7 @@ class Friend {
 
   factory Friend.fromJson(Map<String, dynamic> json) {
     return Friend(
+      userId: json['user_id'],
       name: json['name'],
       email: json['email'],
       profilePicture: json['profile_picture'],
@@ -129,6 +148,7 @@ class Friend {
 
   Map<String, dynamic> toJson() {
     return {
+      'user_id': userId,
       'name': name,
       'email': email,
       'profile_picture': profilePicture,

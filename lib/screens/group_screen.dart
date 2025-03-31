@@ -1,24 +1,43 @@
 // ignore_for_file: use_build_context_synchronously
 
-// import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/models/group_model.dart';
 import 'package:budgetbeam/models/user_model.dart';
+import 'package:budgetbeam/provider/group_list_provider.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/routes/router.dart';
 import 'package:budgetbeam/utils/colors.dart';
+import 'package:budgetbeam/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class GroupScreen extends ConsumerWidget {
+class GroupScreen extends ConsumerStatefulWidget {
   const GroupScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _GroupScreenState createState() => _GroupScreenState();
+}
+
+class _GroupScreenState extends ConsumerState<GroupScreen> {
+  void initState() {
+    super.initState();
+    _fetchGroups();
+  }
+
+  void _fetchGroups() {
+    final userId = ref.read(userNotifierProvider)!.userId;
+    ref
+        .read(groupNotifierProvider.notifier)
+        .fetchGroupsByUserId(userId, context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final TabController tabController =
-        TabController(length: 2, vsync: Scaffold.of(context), initialIndex: 1);
+        TabController(length: 2, vsync: Scaffold.of(context), initialIndex: 0);
 
     final List<Friend> userFriends = ref.read(userNotifierProvider)!.friends;
-    final List<Group> userGroups = ref.read(userNotifierProvider)!.groups;
+    final List<GroupModel> userGroups = ref.watch(groupNotifierProvider);
 
     return Scaffold(
         body: SafeArea(
@@ -111,8 +130,133 @@ class GroupScreen extends ConsumerWidget {
                                     style: TextStyle(fontSize: 15.sp),
                                   )
                                 : ListView.builder(
+                                    itemCount: userGroups.length,
                                     itemBuilder: (context, index) {
-                                      return const Text("Group");
+                                      return Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 2.h, horizontal: 3.w),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.05),
+                                                    blurRadius: 5,
+                                                    spreadRadius: 2)
+                                              ]),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        right: 2.w),
+                                                    alignment: Alignment.center,
+                                                    height: 5.h,
+                                                    width: 5.h,
+                                                    decoration: BoxDecoration(
+                                                        color: categories
+                                                            .firstWhere(
+                                                          (element) {
+                                                            return element[
+                                                                    'text'] ==
+                                                                userGroups[
+                                                                        index]
+                                                                    .groupCategory;
+                                                          },
+                                                          orElse: () => {
+                                                            'color':
+                                                                kPrimaryColor
+                                                          },
+                                                        )['color'][100],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15)),
+                                                    child: Icon(
+                                                      categories.firstWhere(
+                                                          (element) {
+                                                        return element[
+                                                                'text'] ==
+                                                            userGroups[index]
+                                                                .groupCategory;
+                                                      },
+                                                          orElse: () => {
+                                                                'color':
+                                                                    kPrimaryColor
+                                                              })['icon'],
+                                                      color:
+                                                          categories.firstWhere(
+                                                        (element) {
+                                                          return element[
+                                                                  'text'] ==
+                                                              userGroups[index]
+                                                                  .groupCategory;
+                                                        },
+                                                        orElse: () => {
+                                                          'color': kPrimaryColor
+                                                        },
+                                                      )['color'],
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    userGroups[index].groupName,
+                                                    style: TextStyle(
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 1.h),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Row(children: [
+                                                    Text(
+                                                      "Members: ",
+                                                      style: TextStyle(
+                                                          fontSize: 15.sp,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    Text(
+                                                      userGroups[index]
+                                                          .numberOfMembers
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: kPrimaryColor),
+                                                    ),
+                                                  ]),
+                                                  Row(children: [
+                                                    Text(
+                                                      "Spendings: ₹",
+                                                      style: TextStyle(
+                                                          fontSize: 15.sp,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    Text(
+                                                      userGroups[index]
+                                                          .totalSpendings
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: kPrimaryColor),
+                                                    ),
+                                                  ])
+                                                ],
+                                              )
+                                            ],
+                                          ));
                                     },
                                   ))
                       ],

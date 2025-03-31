@@ -28,21 +28,25 @@ void updateGroup(
   }
 }
 
-Future<GroupModel?> getGroup(String groupId, BuildContext context) async {
+Future<List<GroupModel>> getGroupsByUserId(
+    String userId, BuildContext context) async {
   try {
-    DocumentSnapshot doc = await FirebaseFirestore.instance
-        .collection('groups')
-        .doc(groupId)
-        .get();
-    if (doc.exists) {
-      return GroupModel.fromJson(doc.data() as Map<String, dynamic>);
-    }
+    print("user ${userId}");
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('groups').get();
+
+    List<GroupModel> groups = querySnapshot.docs
+        .map((doc) => GroupModel.fromJson(doc.data() as Map<String, dynamic>))
+        .where((group) => group.members.any((member) => member.id == userId))
+        .toList();
+
+    return groups;
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error getting group: $e')),
+      SnackBar(content: Text('Error fetching groups: $e')),
     );
+    return [];
   }
-  return null;
 }
 
 void deleteGroup(String groupId, BuildContext context) {

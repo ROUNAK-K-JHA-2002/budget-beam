@@ -62,14 +62,11 @@ void createUser(UserModel user, BuildContext context, WidgetRef ref) async {
 
 Future<void> updateUser(String userId, Map<String, dynamic> userData,
     BuildContext context, WidgetRef ref) async {
-  print(userData);
   try {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .update(userData);
-    showSuccessSnackbar("User updated successfully");
-
     getUser(userId, context, ref);
   } catch (e) {
     showErrorSnackbar("Failed to update user: $e");
@@ -81,7 +78,6 @@ Future<UserModel?> getUser(
   try {
     DocumentSnapshot doc =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
-
     if (doc.exists) {
       ref
           .read(userNotifierProvider.notifier)
@@ -140,7 +136,7 @@ Future<bool> sendFriendRequest(
   try {
     await FirebaseFirestore.instance
         .collection('friend_requests')
-        .doc(friendRequest.recieverEmail)
+        .doc()
         .set(friendRequest.toJson());
     showSuccessSnackbar("Friend request sent");
     return true;

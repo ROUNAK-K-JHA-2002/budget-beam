@@ -1,6 +1,5 @@
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CustomButton extends StatelessWidget {
@@ -30,7 +29,13 @@ class CustomButton extends StatelessWidget {
         width: 70.w,
         height: 6.h,
         decoration: BoxDecoration(
-          color: !isOutlined ? kPrimaryColor : Colors.white,
+          color: !isOutlined
+              ? isLoading
+                  ? kPrimaryColor.withOpacity(0.5)
+                  : kPrimaryColor
+              : isLoading
+                  ? Colors.white.withOpacity(0.5)
+                  : Colors.white,
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
@@ -46,10 +51,13 @@ class CustomButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLoading)
-              LoadingAnimationWidget.waveDots(
-                color: isOutlined ? kPrimaryColor : Colors.white,
-                size: 20.sp,
-              )
+              SizedBox(
+                  height: 2.5.h,
+                  width: 2.5.h,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: isOutlined ? kPrimaryColor : Colors.white,
+                  ))
             else
               icon,
             SizedBox(width: 2.w),
