@@ -22,7 +22,7 @@ Map<String, WidgetBuilder> appRoutes = {
   '/add-expense': (context) => const AddExpense(),
   '/add-group': (context) => const AddGroup(),
   '/add-friend': (context) => const AddFriend(),
-  '/friend-requests': (context) => FriendRequestScreen(),
+  '/friend-requests': (context) => const FriendRequestScreen(),
 };
 
 void navigateTo(BuildContext context, String route, Object? arguments) {

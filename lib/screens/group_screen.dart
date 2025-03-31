@@ -14,7 +14,7 @@ class GroupScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TabController tabController =
-        TabController(length: 2, vsync: Scaffold.of(context), initialIndex: 1);
+        TabController(length: 2, vsync: Scaffold.of(context), initialIndex: 0);
 
     final List<Friend> userFriends = ref.read(userNotifierProvider)!.friends;
     final List<Group> userGroups = ref.read(userNotifierProvider)!.groups;
