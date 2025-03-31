@@ -24,19 +24,12 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: isLoading ? null : onPressed,
       borderRadius: BorderRadius.circular(18),
       child: Container(
         width: 70.w,
         height: 6.h,
         decoration: BoxDecoration(
-          // gradient: LinearGradient(
-          //   colors: isOutlined
-          //       ? [Colors.white, Colors.white]
-          //       : [kSecondaryColor, kPrimaryColor],
-          //   begin: Alignment.topCenter,
-          //   end: Alignment.bottomCenter,
-          // ),
           color: !isOutlined ? kPrimaryColor : Colors.white,
           borderRadius: BorderRadius.circular(18),
           boxShadow: [

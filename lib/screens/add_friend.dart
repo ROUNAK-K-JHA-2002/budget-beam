@@ -20,8 +20,10 @@ class AddFriend extends ConsumerStatefulWidget {
 class _AddFriendState extends ConsumerState<AddFriend> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
+  final ValueNotifier<bool> _loading = ValueNotifier(false);
 
   void _addFriendRequest(UserModel user, WidgetRef ref) async {
+    _loading.value = true;
     if (_formKey.currentState!.validate()) {
       FriendRequest friendRequest = FriendRequest(
         name: user.name,
@@ -32,8 +34,14 @@ class _AddFriendState extends ConsumerState<AddFriend> {
         recieverEmail: _emailController.text,
         status: "pending",
       );
-      await sendFriendRequest(friendRequest, context);
+      bool isSuccess = await sendFriendRequest(friendRequest, context);
+      if (isSuccess) {
+        Navigator.of(context).popUntil((route) {
+          return route.settings.name == "/";
+        });
+      }
     }
+    _loading.value = false;
   }
 
   @override
@@ -108,6 +116,8 @@ class _AddFriendState extends ConsumerState<AddFriend> {
                       ),
                       CustomTextField(
                         controller: _emailController,
+                        textInputType: TextInputType.emailAddress,
+                        prefixIcon: const Icon(Icons.email),
                         hintText: 'Email',
                         onSaved: (value) {
                           if (value == null || value.isEmpty) {
@@ -131,17 +141,22 @@ class _AddFriendState extends ConsumerState<AddFriend> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CustomButton(
-                            text: "Add Friend",
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              _addFriendRequest(user!, ref);
-                              // Navigator.of(context).pop();
-                            },
-                          ),
+                          ValueListenableBuilder(
+                              valueListenable: _loading,
+                              builder: (context, value, child) {
+                                return CustomButton(
+                                  isLoading: value,
+                                  text: "Add Friend",
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    _addFriendRequest(user!, ref);
+                                    // Navigator.of(context).pop();
+                                  },
+                                );
+                              })
                         ],
                       )
                     ],

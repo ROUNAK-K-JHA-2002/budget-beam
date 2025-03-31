@@ -3,6 +3,7 @@
 import 'package:budgetbeam/models/user_model.dart';
 import 'package:budgetbeam/provider/friend_requests.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/helpers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,19 +41,43 @@ class _FriendRequestScreenState extends ConsumerState<FriendRequestScreen> {
 
   void _acceptFriendRequest(String senderEmail) async {
     try {
-      // print(user.toString());
-
-      // final friend = Friend(
-      //     name: user.name,
-      //     email: user.email,
-      //     profilePicture: user.profilePicture);
-
       var querySnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('email', isEqualTo: senderEmail)
           .get();
       var document = querySnapshot.docs.first;
-      print(document.data());
+      //update friend's friend list
+      final friend_1 = Friend(
+          name: user.name,
+          email: user.email,
+          profilePicture: user.profilePhoto);
+
+      var data = {
+        'friends': FieldValue.arrayUnion([friend_1.toJson()])
+      };
+
+      updateUser(document.data()['user_id'], data, context, ref);
+
+      //update my friend list
+
+      final friend = Friend(
+          name: document.data()['name'],
+          email: document.data()['email'],
+          profilePicture: document.data()['profile_photo']);
+
+      var data_2 = {
+        'friends': FieldValue.arrayUnion([friend.toJson()])
+      };
+      updateUser(user.userId, data_2, context, ref);
+
+      var querySnapshot_second = await FirebaseFirestore.instance
+          .collection('friend_requests')
+          .where('email', isEqualTo: senderEmail)
+          .get();
+      await querySnapshot_second.docs.first.reference.delete();
+      Navigator.of(context).popUntil((route) {
+        return route.settings.name == "/";
+      });
     } catch (e) {
       debugPrint(e.toString());
       showErrorSnackbar("Failed to accept friend request! Please try again");
@@ -66,6 +91,9 @@ class _FriendRequestScreenState extends ConsumerState<FriendRequestScreen> {
           .where('email', isEqualTo: senderEmail)
           .get();
       await querySnapshot.docs.first.reference.delete();
+      Navigator.of(context).popUntil((route) {
+        return route.settings.name == "/";
+      });
     } catch (e) {
       debugPrint(e.toString());
       showErrorSnackbar("Failed to reject friend request! Please try again");

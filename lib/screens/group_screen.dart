@@ -3,6 +3,7 @@
 // import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/models/user_model.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/routes/router.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +15,7 @@ class GroupScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TabController tabController =
-        TabController(length: 2, vsync: Scaffold.of(context), initialIndex: 0);
+        TabController(length: 2, vsync: Scaffold.of(context), initialIndex: 1);
 
     final List<Friend> userFriends = ref.read(userNotifierProvider)!.friends;
     final List<Group> userGroups = ref.read(userNotifierProvider)!.groups;
@@ -90,7 +91,7 @@ class GroupScreen extends ConsumerWidget {
                                     borderRadius: BorderRadius.circular(10)),
                                 color: kPrimaryColor,
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/add-group');
+                                  navigateTo(context, '/add-group', null);
                                 },
                                 child: Row(
                                   children: [
@@ -131,8 +132,8 @@ class GroupScreen extends ConsumerWidget {
                               Row(children: [
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, '/friend-requests');
+                                    navigateTo(
+                                        context, '/friend-requests', null);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -147,7 +148,7 @@ class GroupScreen extends ConsumerWidget {
                                 SizedBox(width: 2.w),
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.pushNamed(context, '/add-friend');
+                                    navigateTo(context, '/add-friend', null);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -196,12 +197,17 @@ class GroupScreen extends ConsumerWidget {
                                             children: [
                                               Row(
                                                 children: [
-                                                  Image.network(
-                                                      userFriends[index]
-                                                          .profilePicture,
-                                                      width: 10.w,
-                                                      height: 10.w,
-                                                      fit: BoxFit.cover),
+                                                  ClipRRect(
+                                                    child: Image.network(
+                                                        userFriends[index]
+                                                            .profilePicture,
+                                                        width: 10.w,
+                                                        height: 10.w,
+                                                        fit: BoxFit.cover),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
                                                   SizedBox(width: 4.w),
                                                   Column(
                                                     mainAxisAlignment:

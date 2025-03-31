@@ -10,6 +10,7 @@ import 'package:budgetbeam/screens/onboarding.dart';
 import 'package:budgetbeam/screens/profile_screen.dart';
 import 'package:budgetbeam/screens/view_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const AppTemplate(),
@@ -26,5 +27,11 @@ Map<String, WidgetBuilder> appRoutes = {
 };
 
 void navigateTo(BuildContext context, String route, Object? arguments) {
-  Navigator.pushNamed(context, route, arguments: arguments);
+  PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
+    context,
+    screen: appRoutes[route]!(context),
+    withNavBar: false,
+    settings: RouteSettings(name: route),
+    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+  );
 }

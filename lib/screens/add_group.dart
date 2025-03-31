@@ -134,21 +134,25 @@ class _AddGroupState extends ConsumerState<AddGroup> {
                             child: ListView.builder(
                               itemCount: _friends.length,
                               itemBuilder: (context, index) {
-                                return CheckboxListTile(
-                                  title: Text(_friends[index].name),
-                                  value: _selectedFriends
-                                      .contains(_friends[index]),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value == true) {
-                                        _selectedFriends.add(_friends[index]);
-                                      } else {
-                                        _selectedFriends
-                                            .remove(_friends[index]);
-                                      }
-                                    });
-                                  },
-                                );
+                                print(_friends.isEmpty);
+                                return _friends.isEmpty
+                                    ? const Text("No friends found")
+                                    : CheckboxListTile(
+                                        title: Text(_friends[index].name),
+                                        value: _selectedFriends
+                                            .contains(_friends[index]),
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            if (value == true) {
+                                              _selectedFriends
+                                                  .add(_friends[index]);
+                                            } else {
+                                              _selectedFriends
+                                                  .remove(_friends[index]);
+                                            }
+                                          });
+                                        },
+                                      );
                               },
                             ),
                           ),

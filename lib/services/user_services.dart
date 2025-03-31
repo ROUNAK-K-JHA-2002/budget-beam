@@ -135,7 +135,7 @@ Future<void> addFriends(
   }
 }
 
-Future<void> sendFriendRequest(
+Future<bool> sendFriendRequest(
     FriendRequest friendRequest, BuildContext context) async {
   try {
     await FirebaseFirestore.instance
@@ -143,7 +143,9 @@ Future<void> sendFriendRequest(
         .doc(friendRequest.recieverEmail)
         .set(friendRequest.toJson());
     showSuccessSnackbar("Friend request sent");
+    return true;
   } catch (e) {
     showErrorSnackbar("Failed to send friend request: $e");
+    return false;
   }
 }
