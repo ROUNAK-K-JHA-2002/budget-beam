@@ -31,7 +31,6 @@ void updateGroup(
 Future<List<GroupModel>> getGroupsByUserId(
     String userId, BuildContext context) async {
   try {
-    print("user ${userId}");
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('groups').get();
 
@@ -62,12 +61,10 @@ void deleteGroup(String groupId, BuildContext context) {
 Future<List<FriendRequest>> getFriendRequests(
     String userEmail, BuildContext context) async {
   try {
-    print("userEmail: $userEmail");
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('friend_requests')
         .where('reciever_email', isEqualTo: userEmail)
         .get();
-    print("querySnapshot: $querySnapshot");
     return querySnapshot.docs
         .map(
             (doc) => FriendRequest.fromJson(doc.data() as Map<String, dynamic>))

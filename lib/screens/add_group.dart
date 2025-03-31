@@ -66,34 +66,32 @@ class _AddGroupState extends ConsumerState<AddGroup> {
           groupName: _nameController.text,
           groupCategory: _category,
           inviteCode: generateInviteCode(),
-          numberOfMembers: 2,
+          numberOfMembers: _selectedFriends.length,
           totalSpendings: 0,
           createdAt: DateTime.now(),
           isPremiumGroup: false,
           members: _selectedFriends,
           transactions: []);
 
-      print(groupData.toJson());
-
       await docRef.set(groupData.toJson());
 
-      for (var member in _selectedFriends) {
-        var userGroupData = Group(
-            id: docRef.id,
-            createdAt: DateTime.now(),
-            isAdmin: true,
-            name: _nameController.text,
-            totalMembers: 2,
-            totalSpendings: 0,
-            groupCategory: _category);
+      // for (var member in _selectedFriends) {
+      //   var userGroupData = Group(
+      //       id: docRef.id,
+      //       createdAt: DateTime.now(),
+      //       isAdmin: true,
+      //       name: _nameController.text,
+      //       totalMembers: 2,
+      //       totalSpendings: 0,
+      //       groupCategory: _category);
 
-        var userData = {
-          "groups": FieldValue.arrayUnion([userGroupData.toJson()])
-        };
+      //   var userData = {
+      //     "groups": FieldValue.arrayUnion([userGroupData.toJson()])
+      //   };
 
-        await updateUser(member.id, userData, context, ref);
-      }
-      await getUser(user.userId, context, ref);
+      //   await updateUser(member.id, userData, context, ref);
+      // }
+      // await getUser(context, ref);
 
       Navigator.of(context).popUntil((route) {
         return route.settings.name == "/";

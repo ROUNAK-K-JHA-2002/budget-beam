@@ -104,7 +104,6 @@ class _FriendRequestScreenState extends ConsumerState<FriendRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(friendRequests.length);
     return Scaffold(
       body: SafeArea(
         child: Container(

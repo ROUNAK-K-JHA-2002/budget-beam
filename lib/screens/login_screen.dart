@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await signInWithGoogle();
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        UserModel? firebaseUser = await getUser(user.uid, context, ref);
+        UserModel? firebaseUser = await getUser(context, ref);
         if (firebaseUser == null) {
           createUser(
               UserModel(

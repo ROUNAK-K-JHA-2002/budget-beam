@@ -13,8 +13,9 @@ Future<User?> signInWithAnonymously() async {
 
 Future<User?> signInWithGoogle() async {
   try {
-    final GoogleSignInAccount? googleSignInAccount =
-        await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleSignInAccount = await GoogleSignIn(
+      signInOption: SignInOption.standard,
+    ).signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount!.authentication;
     final AuthCredential credential = GoogleAuthProvider.credential(

@@ -4,6 +4,7 @@ import 'package:budgetbeam/models/user_model.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/utils/helpers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -67,25 +68,31 @@ Future<void> updateUser(String userId, Map<String, dynamic> userData,
         .collection('users')
         .doc(userId)
         .update(userData);
-    getUser(userId, context, ref);
+    getUser(context, ref);
   } catch (e) {
     showErrorSnackbar("Failed to update user: $e");
   }
 }
 
-Future<UserModel?> getUser(
-    String userId, BuildContext context, WidgetRef ref) async {
+Future<UserModel?> getUser(BuildContext context, WidgetRef ref) async {
   try {
-    DocumentSnapshot doc =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    if (doc.exists) {
-      ref
-          .read(userNotifierProvider.notifier)
-          .setUser(UserModel.fromJson(doc.data() as Map<String, dynamic>));
-      return doc.data() as UserModel;
-    } else {
+    var userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (doc.exists) {
+        ref
+            .read(userNotifierProvider.notifier)
+            .setUser(UserModel.fromJson(doc.data() as Map<String, dynamic>));
+        UserModel user = UserModel.fromJson(doc.data() as Map<String, dynamic>);
+        return user;
+      } else {
+        return null;
+      }
+    } else
       return null;
-    }
   } catch (e) {
     return null;
   }

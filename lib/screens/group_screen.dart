@@ -33,7 +33,7 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
   @override
   Widget build(BuildContext context) {
     final List<GroupModel> userGroups = ref.watch(groupNotifierProvider);
-
+    _fetchGroups();
     return Scaffold(
         body: SafeArea(
       child: Container(
@@ -81,31 +81,64 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                             : ListView.builder(
                                 itemCount: userGroups.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 2.h, horizontal: 3.w),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.05),
-                                                blurRadius: 5,
-                                                spreadRadius: 2)
-                                          ]),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    EdgeInsets.only(right: 2.w),
-                                                alignment: Alignment.center,
-                                                height: 5.h,
-                                                width: 5.h,
-                                                decoration: BoxDecoration(
+                                  return GestureDetector(
+                                    onTap: () {
+                                      navigateTo(context, "/group-details",
+                                          {"group_data": userGroups[index]});
+                                    },
+                                    child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 2.h, horizontal: 3.w),
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 1.h),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.05),
+                                                  blurRadius: 5,
+                                                  spreadRadius: 2)
+                                            ]),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 2.w),
+                                                  alignment: Alignment.center,
+                                                  height: 5.h,
+                                                  width: 5.h,
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          categories.firstWhere(
+                                                        (element) {
+                                                          return element[
+                                                                  'text'] ==
+                                                              userGroups[index]
+                                                                  .groupCategory;
+                                                        },
+                                                        orElse: () => {
+                                                          'color': kPrimaryColor
+                                                        },
+                                                      )['color'][100],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15)),
+                                                  child: Icon(
+                                                    categories.firstWhere(
+                                                        (element) {
+                                                      return element['text'] ==
+                                                          userGroups[index]
+                                                              .groupCategory;
+                                                    },
+                                                        orElse: () => {
+                                                              'color':
+                                                                  kPrimaryColor
+                                                            })['icon'],
                                                     color:
                                                         categories.firstWhere(
                                                       (element) {
@@ -117,89 +150,67 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                                                       orElse: () => {
                                                         'color': kPrimaryColor
                                                       },
-                                                    )['color'][100],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
-                                                child: Icon(
-                                                  categories.firstWhere(
-                                                      (element) {
-                                                    return element['text'] ==
-                                                        userGroups[index]
-                                                            .groupCategory;
-                                                  },
-                                                      orElse: () => {
-                                                            'color':
-                                                                kPrimaryColor
-                                                          })['icon'],
-                                                  color: categories.firstWhere(
-                                                    (element) {
-                                                      return element['text'] ==
-                                                          userGroups[index]
-                                                              .groupCategory;
-                                                    },
-                                                    orElse: () => {
-                                                      'color': kPrimaryColor
-                                                    },
-                                                  )['color'],
-                                                ),
-                                              ),
-                                              Text(
-                                                userGroups[index].groupName,
-                                                style: TextStyle(
-                                                    fontSize: 16.sp,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 1.h),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(children: [
-                                                Text(
-                                                  "Members: ",
-                                                  style: TextStyle(
-                                                      fontSize: 15.sp,
-                                                      fontWeight:
-                                                          FontWeight.w500),
+                                                    )['color'],
+                                                  ),
                                                 ),
                                                 Text(
-                                                  userGroups[index]
-                                                      .numberOfMembers
-                                                      .toString(),
+                                                  userGroups[index].groupName,
                                                   style: TextStyle(
                                                       fontSize: 16.sp,
                                                       fontWeight:
-                                                          FontWeight.w600,
-                                                      color: kPrimaryColor),
+                                                          FontWeight.w600),
                                                 ),
-                                              ]),
-                                              Row(children: [
-                                                Text(
-                                                  "Spendings: ₹",
-                                                  style: TextStyle(
-                                                      fontSize: 15.sp,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
-                                                Text(
-                                                  userGroups[index]
-                                                      .totalSpendings
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 16.sp,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: kPrimaryColor),
-                                                ),
-                                              ])
-                                            ],
-                                          )
-                                        ],
-                                      ));
+                                              ],
+                                            ),
+                                            SizedBox(height: 1.h),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(children: [
+                                                  Text(
+                                                    "Members: ",
+                                                    style: TextStyle(
+                                                        fontSize: 15.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  Text(
+                                                    userGroups[index]
+                                                        .numberOfMembers
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: kPrimaryColor),
+                                                  ),
+                                                ]),
+                                                Row(children: [
+                                                  Text(
+                                                    "Spendings: ₹",
+                                                    style: TextStyle(
+                                                        fontSize: 15.sp,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  Text(
+                                                    userGroups[index]
+                                                        .totalSpendings
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: kPrimaryColor),
+                                                  ),
+                                                ])
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                  );
                                 },
                               ))
                   ],

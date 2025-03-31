@@ -9,7 +9,6 @@ class GroupNotifier extends StateNotifier<List<GroupModel>> {
   Future<List<GroupModel>> fetchGroupsByUserId(
       String userId, BuildContext context) async {
     final groups = await getGroupsByUserId(userId, context);
-    print(groups);
     state = groups;
     return groups;
   }

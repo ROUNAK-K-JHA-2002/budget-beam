@@ -149,7 +149,6 @@ class _SettingsState extends State<Settings> {
                             final isAppLocked =
                                 await storage.read(key: 'appLockEnabled') ??
                                     "false";
-                            print("isAppLocked: $isAppLocked");
                             final bool didAuthenticate = await authenticate(
                                 "Authenticate to enable app lock");
                             if (didAuthenticate) {
@@ -157,7 +156,6 @@ class _SettingsState extends State<Settings> {
                                   isAppLocked == "true" ? "false" : "true";
                               await storage.write(
                                   key: 'appLockEnabled', value: newLockStatus);
-                              print("newLockStatus: $newLockStatus");
                               appLockEnabled.value = newLockStatus == "true";
                             }
                           });

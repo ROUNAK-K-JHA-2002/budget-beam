@@ -95,7 +95,6 @@ class _AnalysisState extends State<Analysis> {
   }
 
   Color _getCategoryColor(String category) {
-    print(category);
     return categories.firstWhere(
       (c) => c['text'] == category,
       orElse: () => {'color': Colors.grey},
@@ -266,9 +265,9 @@ class _AnalysisState extends State<Analysis> {
                         marks: [
                           IntervalMark(
                             label: LabelEncode(
-                                encoder: (tuple) =>
-                                    Label(tuple['category'].toString(), LabelStyle())
-                                ),
+                                encoder: (tuple) => Label(
+                                    tuple['category'].toString(),
+                                    LabelStyle())),
                             shape: ShapeEncode(
                                 value: RectShape(
                                     borderRadius: BorderRadius.circular(10))),

@@ -3,6 +3,7 @@
 import 'package:budgetbeam/models/user_model.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
 import 'package:budgetbeam/routes/router.dart';
+import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,12 @@ class FriendScreen extends ConsumerStatefulWidget {
 }
 
 class _FriendScreenState extends ConsumerState<FriendScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getUser(context, ref);
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Friend> userFriends = ref.read(userNotifierProvider)!.friends;
@@ -97,6 +104,7 @@ class _FriendScreenState extends ConsumerState<FriendScreen> {
                                         )
                                       ],
                                     ),
+                                    margin: EdgeInsets.symmetric(vertical: 1.h),
                                     padding: EdgeInsets.symmetric(
                                         vertical: 2.h, horizontal: 3.w),
                                     child: Row(

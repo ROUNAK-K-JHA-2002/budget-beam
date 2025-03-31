@@ -9,7 +9,6 @@ import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
 import 'package:budgetbeam/utils/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,7 +48,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (user == null) {
-        getUser(FirebaseAuth.instance.currentUser?.uid ?? '', context, ref);
+        getUser(context, ref);
       }
     });
 
@@ -64,8 +63,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         return 'Good evening';
       }
     }
-
-    // print(budget);
 
     return Scaffold(
         // backgroundColor: Colors.black,

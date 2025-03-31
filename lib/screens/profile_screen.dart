@@ -12,6 +12,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -201,6 +202,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     TextButton(
                                       onPressed: () {
                                         FirebaseAuth.instance.signOut();
+                                        GoogleSignIn().signOut();
                                         storage.deleteAll();
                                         Navigator.pushNamedAndRemoveUntil(
                                             context,
