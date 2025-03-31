@@ -3,6 +3,7 @@
 import 'package:budgetbeam/routes/router.dart';
 import 'package:budgetbeam/services/object_box.dart';
 import 'package:budgetbeam/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ Future<void> main() async {
   }
   _objectBoxStore = await ObjectBoxStore.create();
   await Firebase.initializeApp();
+  FirebaseFirestore.instance.settings =
+      const Settings(persistenceEnabled: true);
   MobileAds.instance.initialize();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: kPrimaryColor, // status bar color

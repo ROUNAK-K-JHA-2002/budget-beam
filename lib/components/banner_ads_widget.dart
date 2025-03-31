@@ -39,9 +39,11 @@ class _BannerAdsWidgetState extends ConsumerState<BannerAdsWidget> {
                 ? bannerAd.size.height.toDouble()
                 : 0,
             alignment: Alignment.center,
-            child: user?.plan != "Premium Plan"
-                ? AdWidget(ad: bannerAd)
-                : const SizedBox.shrink(),
+            child:
+                // user?.plan != "Premium Plan"
+                //     ? AdWidget(ad: bannerAd)
+                //     :
+                const SizedBox.shrink(),
           );
   }
 }

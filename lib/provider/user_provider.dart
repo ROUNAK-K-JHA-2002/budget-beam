@@ -39,6 +39,5 @@ class UserNotifier extends StateNotifier<UserModel?> {
   }
 }
 
-// Provider for UserNotifier
 final userNotifierProvider =
     StateNotifierProvider<UserNotifier, UserModel?>((ref) => UserNotifier());

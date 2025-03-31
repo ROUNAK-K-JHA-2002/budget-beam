@@ -128,22 +128,38 @@ class GroupScreen extends ConsumerWidget {
                                 "Your Friends",
                                 style: TextStyle(fontSize: 16.sp),
                               ),
-                              MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                color: kPrimaryColor,
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/add-friend');
-                                },
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.add, color: Colors.white),
-                                    SizedBox(width: 2.w),
-                                    const Text("Add Friend",
-                                        style: TextStyle(color: Colors.white)),
-                                  ],
+                              Row(children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, '/friend-requests');
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: kPrimaryColor.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: EdgeInsets.all(2.w),
+                                    child: const Icon(Icons.notifications,
+                                        color: kPrimaryColor),
+                                  ),
                                 ),
-                              )
+                                SizedBox(width: 2.w),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/add-friend');
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: kSecondaryColor.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: EdgeInsets.all(2.w),
+                                    child: const Icon(Icons.person_add,
+                                        color: kSecondaryColor),
+                                  ),
+                                )
+                              ]),
                             ]),
                         SizedBox(height: 2.h),
                         Expanded(
@@ -180,33 +196,12 @@ class GroupScreen extends ConsumerWidget {
                                             children: [
                                               Row(
                                                 children: [
-                                                  !userFriends[index]
-                                                          .hasOnboarded
-                                                      ? Container(
-                                                          decoration: BoxDecoration(
-                                                              color: kPrimaryColor
-                                                                  .withOpacity(
-                                                                      0.2),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100)),
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  2.w),
-                                                          child: Icon(
-                                                            Icons.person,
-                                                            color:
-                                                                kPrimaryColor,
-                                                            size: 20.sp,
-                                                          ),
-                                                        )
-                                                      : Image.network(
-                                                          userFriends[index]
-                                                              .profilePicture,
-                                                          width: 10.w,
-                                                          height: 10.w,
-                                                          fit: BoxFit.cover),
+                                                  Image.network(
+                                                      userFriends[index]
+                                                          .profilePicture,
+                                                      width: 10.w,
+                                                      height: 10.w,
+                                                      fit: BoxFit.cover),
                                                   SizedBox(width: 4.w),
                                                   Column(
                                                     mainAxisAlignment:

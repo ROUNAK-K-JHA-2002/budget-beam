@@ -19,52 +19,20 @@ class AddFriend extends ConsumerStatefulWidget {
 
 class _AddFriendState extends ConsumerState<AddFriend> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
-  void _addFriend(String userId, WidgetRef ref) {
+  void _addFriendRequest(UserModel user, WidgetRef ref) async {
     if (_formKey.currentState!.validate()) {
-      final newFriend = Friend(
-        id: '',
-        name: _nameController.text,
-        email: _emailController.text,
-        hasOnboarded: false,
-        profilePicture: '',
+      FriendRequest friendRequest = FriendRequest(
+        name: user.name,
+        userId: user.userId,
+        email: user.email,
+        profilePicture: user.profilePhoto,
+        createdAt: DateTime.now(),
+        recieverEmail: _emailController.text,
+        status: "pending",
       );
-      getUserByEmail(_emailController.text, context).then((existingUser) {
-        if (existingUser != null) {
-          updateUser(
-              userId,
-              {
-                'friends':
-                    ref.read(userNotifierProvider)!.friends.map((friend) {
-                  if (friend.email == _emailController.text) {
-                    return Friend(
-                      id: friend.id,
-                      name: friend.name,
-                      email: friend.email,
-                      hasOnboarded: true,
-                      profilePicture: existingUser.profilePhoto,
-                    );
-                  }
-                  return friend;
-                }).toList(),
-              },
-              context,
-              ref);
-        } else {
-          updateUser(
-              userId,
-              {
-                'friends': [
-                  ...ref.read(userNotifierProvider)!.friends,
-                  newFriend.toJson()
-                ]
-              },
-              context,
-              ref);
-        }
-      });
+      await sendFriendRequest(friendRequest, context);
     }
   }
 
@@ -135,22 +103,6 @@ class _AddFriendState extends ConsumerState<AddFriend> {
                     children: [
                       const Align(
                         alignment: Alignment.centerLeft,
-                        child: Text('Name',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      CustomTextField(
-                        controller: _nameController,
-                        hintText: 'Name',
-                        onSaved: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a name';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      const Align(
-                        alignment: Alignment.centerLeft,
                         child: Text('Email',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
@@ -171,7 +123,7 @@ class _AddFriendState extends ConsumerState<AddFriend> {
                       const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'If the user is not registered, an invite link will be sent to this email. Otherwise, they will be added directly to your friend list.',
+                          'If the user is not registered, an invite link will be sent to this email. Otherwise, they will recieve a friend request in-app.',
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ),
@@ -186,8 +138,8 @@ class _AddFriendState extends ConsumerState<AddFriend> {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              _addFriend(user!.userId, ref);
-                              Navigator.of(context).pop();
+                              _addFriendRequest(user!, ref);
+                              // Navigator.of(context).pop();
                             },
                           ),
                         ],

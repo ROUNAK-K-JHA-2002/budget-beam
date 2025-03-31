@@ -112,3 +112,38 @@ Future<UserModel?> getUserByEmail(String email, BuildContext context) async {
     return null;
   }
 }
+
+Future<void> addFriends(
+    String userId, Friend friend, BuildContext context) async {
+  try {
+    DocumentReference docRef =
+        FirebaseFirestore.instance.collection('friends').doc(userId);
+    DocumentSnapshot doc = await docRef.get();
+
+    if (doc.exists) {
+      await docRef.update({
+        'friends': FieldValue.arrayUnion([friend.toJson()])
+      });
+    } else {
+      await FirebaseFirestore.instance.collection('friends').doc(userId).set({
+        'user_id': userId,
+        'friends': [friend.toJson()]
+      });
+    }
+  } catch (e) {
+    showErrorSnackbar("Failed to add friend: $e");
+  }
+}
+
+Future<void> sendFriendRequest(
+    FriendRequest friendRequest, BuildContext context) async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('friend_requests')
+        .doc(friendRequest.recieverEmail)
+        .set(friendRequest.toJson());
+    showSuccessSnackbar("Friend request sent");
+  } catch (e) {
+    showErrorSnackbar("Failed to send friend request: $e");
+  }
+}

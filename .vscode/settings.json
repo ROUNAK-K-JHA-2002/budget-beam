@@ -1,5 +1,6 @@
 {
     "cmake.sourceDirectory": "/home/dextrix/Desktop/budgetbeam/linux",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "cmake.ignoreCMakeListsMissing": true
+    "cmake.ignoreCMakeListsMissing": true,
+    "postman.settings.dotenv-detection-notification-visibility": false
 }

@@ -109,37 +109,73 @@ class Group {
 }
 
 class Friend {
-  final String id;
   final String name;
   final String email;
-  final bool hasOnboarded;
   final String profilePicture;
 
   Friend({
-    required this.id,
     required this.name,
     required this.email,
-    required this.hasOnboarded,
     required this.profilePicture,
   });
 
   factory Friend.fromJson(Map<String, dynamic> json) {
     return Friend(
-      id: json['id'],
       name: json['name'],
       email: json['email'],
-      hasOnboarded: json['has_onboarded'],
       profilePicture: json['profile_picture'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'name': name,
       'email': email,
-      'has_onboarded': hasOnboarded,
       'profile_picture': profilePicture,
+    };
+  }
+}
+
+class FriendRequest {
+  final String name;
+  final String email;
+  final String profilePicture;
+  final String userId;
+  final String status;
+  final DateTime createdAt;
+  final String recieverEmail;
+
+  FriendRequest({
+    required this.name,
+    required this.email,
+    required this.profilePicture,
+    required this.userId,
+    required this.status,
+    required this.createdAt,
+    required this.recieverEmail,
+  });
+
+  factory FriendRequest.fromJson(Map<String, dynamic> json) {
+    return FriendRequest(
+      name: json['name'],
+      email: json['email'],
+      profilePicture: json['profile_picture'],
+      userId: json['user_id'],
+      status: json['status'],
+      createdAt: DateTime.parse(json['created_at']),
+      recieverEmail: json['reciever_email'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'email': email,
+      'profile_picture': profilePicture,
+      'user_id': userId,
+      'status': status,
+      'created_at': createdAt.toIso8601String(),
+      'reciever_email': recieverEmail,
     };
   }
 }

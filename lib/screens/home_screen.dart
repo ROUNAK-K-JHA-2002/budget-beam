@@ -121,9 +121,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ],
                           ),
                           GestureDetector(
-                            onTap: () {
-                              // Handle tap action, such as clearing ObjectBox data
-                            },
+                            onTap: () {},
                             child: Container(
                               decoration: user?.hasOnboarded == true
                                   ? BoxDecoration(
