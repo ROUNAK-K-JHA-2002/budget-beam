@@ -3,6 +3,7 @@ import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/provider/expense_provider.dart';
 import 'package:budgetbeam/provider/net_balance_provider.dart';
 import 'package:budgetbeam/provider/user_provider.dart';
+import 'package:budgetbeam/routes/router.dart';
 import 'package:budgetbeam/screens/add_expense.dart';
 import 'package:budgetbeam/services/user_services.dart';
 import 'package:budgetbeam/utils/colors.dart';
@@ -71,7 +72,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         floatingActionButton: FloatingActionButton(
             backgroundColor: kPrimaryColor,
             onPressed: () {
-              Navigator.pushNamed(context, '/add-expense');
+              navigateTo(context, '/add-expense', null);
             },
             child: const Icon(
               Icons.add,

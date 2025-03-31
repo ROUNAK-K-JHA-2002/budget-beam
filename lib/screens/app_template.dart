@@ -1,5 +1,6 @@
 import 'package:budgetbeam/main.dart';
 import 'package:budgetbeam/screens/finance_screen.dart';
+import 'package:budgetbeam/screens/friends_screen.dart';
 import 'package:budgetbeam/screens/group_screen.dart';
 import 'package:budgetbeam/screens/home_screen.dart';
 import 'package:budgetbeam/screens/profile_screen.dart';
@@ -40,6 +41,7 @@ class _AppTemplateState extends State<AppTemplate> {
         const HomeScreen(),
         const FinanceScreen(),
         const GroupScreen(),
+        const FriendScreen(),
         const ProfileScreen(),
       ];
 
@@ -59,6 +61,12 @@ class _AppTemplateState extends State<AppTemplate> {
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.group),
           title: "Groups",
+          activeColorPrimary: Colors.blueAccent,
+          inactiveColorPrimary: Colors.black,
+        ),
+        PersistentBottomNavBarItem(
+          icon: const Icon(Icons.airline_seat_individual_suite_rounded),
+          title: "Friends",
           activeColorPrimary: Colors.blueAccent,
           inactiveColorPrimary: Colors.black,
         ),

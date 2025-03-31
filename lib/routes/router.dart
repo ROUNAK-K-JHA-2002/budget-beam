@@ -34,4 +34,10 @@ void navigateTo(BuildContext context, String route, Object? arguments) {
     settings: RouteSettings(name: route),
     pageTransitionAnimation: PageTransitionAnimation.cupertino,
   );
+  // navigatorKey.currentState?.push(
+  //   MaterialPageRoute(
+  //     builder: (context) => appRoutes[route]!(context),
+  //     settings: RouteSettings(name: route, arguments: arguments),
+  //   ),
+  // );
 }
